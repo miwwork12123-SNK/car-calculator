@@ -7,22 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Prompt', sans-serif; }
+        * { font-family: 'Prompt', sans-serif; box-sizing: border-box; }
         
-        /* Force Single Page A4 Print Optimization */
+        /* Perfect Single Page A4 Print Optimization */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 4mm 6mm !important; /* บีบขอบกระดาษให้เหลือน้อยลง */
+                margin: 5mm 8mm;
             }
             html, body {
-                height: 100vh !important;
+                height: 100% !important;
                 background: white !important;
                 color: black !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 11px !important;
-                line-height: 1.2 !important;
+                font-size: 12px !important;
+                line-height: 1.35 !important;
                 overflow: hidden !important;
             }
             .no-print { display: none !important; }
@@ -32,12 +32,8 @@
                 padding: 0 !important;
                 max-width: 100% !important;
                 margin: 0 !important;
+                page-break-inside: avoid !important;
             }
-            /* บีบ ระยะห่าง ส่วนต่างๆ ตอนพิมพ์ */
-            .print-compact-mb { margin-bottom: 6px !important; }
-            .print-compact-p { padding: 6px 10px !important; }
-            .print-compact-gap { gap: 6px !important; }
-            
             input, select, textarea {
                 border: none !important;
                 background: transparent !important;
@@ -49,7 +45,7 @@
             }
             .btn-del, .btn-add { display: none !important; }
             .monthly-highlight {
-                font-size: 20px !important;
+                font-size: 22px !important;
                 font-weight: 800 !important;
             }
             .print-card-bg {
@@ -63,29 +59,33 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            /* Prevent Page Spillovers */
+            div, section {
+                page-break-inside: avoid !important;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen p-2 sm:p-4 text-slate-800">
-    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-3 sm:p-6 print-container">
+<body class="bg-slate-100 min-h-screen p-2 sm:p-5 text-slate-800">
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-4 sm:p-7 print-container">
         
         <!-- Header Section -->
-        <div class="flex justify-between items-start border-b pb-2 mb-3 print-compact-mb">
+        <div class="flex justify-between items-start border-b pb-3 mb-4">
             <div>
-                <span class="inline-block bg-slate-100 text-slate-500 font-bold text-[10px] px-2 py-0.5 rounded-full mb-0.5 tracking-wider">OFFICIAL SALES QUOTATION</span>
-                <h1 class="text-lg sm:text-xl font-bold text-slate-900 leading-tight">ใบเสนอราคาและตารางค่างวดรถยนต์</h1>
+                <span class="inline-block bg-slate-100 text-slate-500 font-bold text-[11px] px-2.5 py-0.5 rounded-full mb-1 tracking-wider">OFFICIAL SALES QUOTATION</span>
+                <h1 class="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">ใบเสนอราคาและตารางค่างวดรถยนต์</h1>
             </div>
-            <div class="flex flex-col items-end gap-1">
-                <div class="bg-slate-50 border rounded-lg px-2 py-1 flex items-center gap-1.5 text-xs">
+            <div class="flex flex-col items-end gap-1.5">
+                <div class="bg-slate-50 border rounded-lg px-2.5 py-1 flex items-center gap-2 text-xs">
                     <span class="text-slate-500 font-medium">วันที่เสนอราคา:</span>
                     <input type="date" id="docDate" class="bg-transparent font-bold text-slate-800 focus:outline-none">
                 </div>
                 <!-- Action Buttons -->
                 <div class="flex gap-2 no-print">
-                    <button onclick="copyToChat()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium py-1 px-2.5 rounded-lg flex items-center gap-1 shadow-sm transition">
+                    <button onclick="copyToChat()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium py-1.5 px-3 rounded-lg flex items-center gap-1 shadow-sm transition">
                         📋 คัดลอกลงแชท
                     </button>
-                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-1 px-2.5 rounded-lg flex items-center gap-1 shadow-sm transition">
+                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-1.5 px-3 rounded-lg flex items-center gap-1 shadow-sm transition">
                         🖨️ พิมพ์ / บันทึก PDF
                     </button>
                 </div>
@@ -93,54 +93,54 @@
         </div>
 
         <!-- Section 1: Customer & Vehicle Info -->
-        <div class="grid grid-cols-2 gap-3 mb-3 print-compact-mb">
+        <div class="grid grid-cols-2 gap-3.5 mb-4">
             <!-- Customer Info -->
-            <div class="bg-slate-50/80 p-2.5 rounded-xl border border-slate-200/80 print-card-bg print-compact-p">
-                <h3 class="text-xs font-bold text-slate-800 mb-1.5 flex items-center gap-1">
-                    👤 ข้อมูลลูกค้า <span class="text-slate-400 font-normal text-[10px]">(Customer Info)</span>
+            <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 print-card-bg">
+                <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 flex items-center gap-1">
+                    👤 ข้อมูลลูกค้า <span class="text-slate-400 font-normal text-xs">(Customer Info)</span>
                 </h3>
-                <div class="space-y-1 text-xs">
+                <div class="space-y-1.5 text-xs">
                     <div>
-                        <label class="block text-[10px] text-slate-500">ชื่อ-นามสกุล ลูกค้า</label>
-                        <input type="text" id="custName" placeholder="ระบุชื่อลูกค้า" class="w-full bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none text-xs">
+                        <label class="block text-[11px] text-slate-500">ชื่อ-นามสกุล ลูกค้า</label>
+                        <input type="text" id="custName" placeholder="ระบุชื่อลูกค้า" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 focus:outline-none text-xs">
                     </div>
-                    <div class="grid grid-cols-2 gap-1.5">
+                    <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[10px] text-slate-500">เบอร์โทรศัพท์</label>
-                            <input type="text" id="custPhone" placeholder="08X-XXX-XXXX" class="w-full bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none text-xs">
+                            <label class="block text-[11px] text-slate-500">เบอร์โทรศัพท์</label>
+                            <input type="text" id="custPhone" placeholder="08X-XXX-XXXX" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 focus:outline-none text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] text-slate-500">LINE ID</label>
-                            <input type="text" id="custLine" placeholder="ไอดีไลน์" class="w-full bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none text-xs">
+                            <label class="block text-[11px] text-slate-500">LINE ID</label>
+                            <input type="text" id="custLine" placeholder="ไอดีไลน์" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 focus:outline-none text-xs">
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Vehicle & Sales Representative Info -->
-            <div class="bg-slate-50/80 p-2.5 rounded-xl border border-slate-200/80 print-card-bg print-compact-p">
-                <h3 class="text-xs font-bold text-slate-800 mb-1.5 flex items-center gap-1">
+            <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200/80 print-card-bg">
+                <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 flex items-center gap-1">
                     🚘 รายละเอียดรถยนต์ & ผู้ขาย
                 </h3>
-                <div class="space-y-1 text-xs">
-                    <div class="grid grid-cols-2 gap-1.5">
+                <div class="space-y-1.5 text-xs">
+                    <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[10px] text-slate-500">รุ่นรถยนต์</label>
-                            <input type="text" id="carModel" value="MG4 ELECTRIC" class="w-full bg-white border border-slate-200 rounded px-2 py-1 font-bold text-slate-800 focus:outline-none text-xs">
+                            <label class="block text-[11px] text-slate-500">รุ่นรถยนต์</label>
+                            <input type="text" id="carModel" value="MG4 ELECTRIC" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 font-bold text-slate-800 focus:outline-none text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] text-slate-500">สีตัวรถ</label>
-                            <input type="text" id="carColor" placeholder="ขาวนุก / ดำ" class="w-full bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none text-xs">
+                            <label class="block text-[11px] text-slate-500">สีตัวรถ</label>
+                            <input type="text" id="carColor" placeholder="ขาวนุก / ดำ" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 focus:outline-none text-xs">
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-1.5">
+                    <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[10px] text-slate-500">ที่ปรึกษาการขาย (เซลส์)</label>
-                            <input type="text" id="salesName" placeholder="ชื่อเซลส์" class="w-full bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none text-xs">
+                            <label class="block text-[11px] text-slate-500">ที่ปรึกษาการขาย (เซลส์)</label>
+                            <input type="text" id="salesName" placeholder="ชื่อเซลส์" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 focus:outline-none text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] text-slate-500">เบอร์ติดต่อเซลส์</label>
-                            <input type="text" id="salesPhone" placeholder="เบอร์โทรเซลส์" class="w-full bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none text-xs">
+                            <label class="block text-[11px] text-slate-500">เบอร์ติดต่อเซลส์</label>
+                            <input type="text" id="salesPhone" placeholder="เบอร์โทรเซลส์" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 focus:outline-none text-xs">
                         </div>
                     </div>
                 </div>
@@ -148,64 +148,64 @@
         </div>
 
         <!-- Section 2: Calculation Card & Purchase Type Toggle -->
-        <div class="bg-slate-50/60 p-3 rounded-xl border border-slate-200/90 mb-3 print-card-bg print-compact-mb print-compact-p">
+        <div class="bg-slate-50/60 p-3.5 rounded-2xl border border-slate-200/90 mb-4 print-card-bg">
             
             <!-- Purchase Type Buttons -->
-            <div class="flex items-center justify-between gap-2 mb-2.5 border-b border-slate-200 pb-2">
-                <span class="text-xs font-bold text-slate-800">💳 รูปแบบการซื้อ <span class="text-slate-400 font-normal">(Purchase Type):</span></span>
-                <div class="flex bg-slate-200/70 p-0.5 rounded-lg">
-                    <button id="btnFinance" onclick="setPurchaseType('finance')" class="py-1 px-3 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center gap-1">
+            <div class="flex items-center justify-between gap-2 mb-3 border-b border-slate-200 pb-2.5">
+                <span class="text-xs sm:text-sm font-bold text-slate-800">💳 รูปแบบการซื้อ <span class="text-slate-400 font-normal text-xs">(Purchase Type):</span></span>
+                <div class="flex bg-slate-200/70 p-0.5 rounded-xl">
+                    <button id="btnFinance" onclick="setPurchaseType('finance')" class="py-1 px-3.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center gap-1.5">
                         🏦 จัดไฟแนนซ์ (Finance)
                     </button>
-                    <button id="btnCash" onclick="setPurchaseType('cash')" class="py-1 px-3 rounded-md text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1">
+                    <button id="btnCash" onclick="setPurchaseType('cash')" class="py-1 px-3.5 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
                         💵 ซื้อเงินสด (Cash)
                     </button>
                 </div>
             </div>
 
             <!-- 3 Columns Calculation Layout -->
-            <div class="grid grid-cols-3 gap-2.5 mb-2.5 print-compact-mb">
+            <div class="grid grid-cols-3 gap-3 mb-3">
                 
                 <!-- Col 1: Price & Discount -->
-                <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="text-[11px] font-bold text-slate-500 mb-1.5 border-b pb-0.5">1. ราคาและส่วนลด</h4>
-                        <div class="space-y-1.5 text-xs">
+                        <h4 class="text-xs font-bold text-slate-500 mb-2 border-b pb-1">1. ราคาและส่วนลด</h4>
+                        <div class="space-y-2 text-xs">
                             <div>
-                                <label class="block text-[10px] text-slate-600">ราคารถยนต์มาตรฐาน (บาท)</label>
-                                <input type="number" id="price" value="950000" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-bold text-slate-800 text-right focus:outline-none">
+                                <label class="block text-slate-600 mb-0.5">ราคารถยนต์มาตรฐาน (บาท)</label>
+                                <input type="number" id="price" value="950000" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 text-right focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-slate-600">ส่วนลดเงินสด (บาท)</label>
-                                <input type="number" id="cashDiscount" value="30000" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-bold text-slate-800 text-right focus:outline-none">
+                                <label class="block text-slate-600 mb-0.5">ส่วนลดเงินสด (บาท)</label>
+                                <input type="number" id="cashDiscount" value="30000" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 text-right focus:outline-none">
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2 pt-1 border-t border-slate-100 flex justify-between items-baseline">
-                        <span class="text-[10px] text-slate-500">สุทธิราคารถยนต์:</span>
-                        <span id="netPrice" class="text-sm font-extrabold text-blue-900">0 ฿</span>
+                    <div class="mt-3 pt-1.5 border-t border-slate-100 flex justify-between items-baseline">
+                        <span class="text-xs text-slate-500">สุทธิราคารถยนต์:</span>
+                        <span id="netPrice" class="text-base font-extrabold text-blue-900">0 ฿</span>
                     </div>
                 </div>
 
                 <!-- Col 2: Finance Conditions -->
-                <div id="financeCol" class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div id="financeCol" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="text-[11px] font-bold text-slate-500 mb-1.5 border-b pb-0.5">2. เงื่อนไขการผ่อนชำระ</h4>
-                        <div class="space-y-1.5 text-xs">
+                        <h4 class="text-xs font-bold text-slate-500 mb-2 border-b pb-1">2. เงื่อนไขการผ่อนชำระ</h4>
+                        <div class="space-y-2 text-xs">
                             <div class="flex justify-between items-center">
-                                <label class="text-[10px] text-slate-600">เงินดาวน์</label>
-                                <div class="flex items-center gap-0.5">
-                                    <input type="number" id="downPercent" value="20" oninput="calculateFromPercent()" class="w-12 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-right focus:outline-none">
-                                    <span class="font-bold text-slate-600 text-[10px]">%</span>
+                                <label class="text-slate-600">เงินดาวน์</label>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="downPercent" value="20" oninput="calculateFromPercent()" class="w-14 bg-slate-50 border border-slate-200 rounded-lg p-1 font-bold text-right focus:outline-none">
+                                    <span class="font-bold text-slate-600">%</span>
                                 </div>
                             </div>
-                            <div class="text-[10px] text-right text-slate-400">
+                            <div class="text-[11px] text-right text-slate-400">
                                 คิดเป็นเงิน: <span id="downAmountText" class="font-bold text-slate-700">0 บาท</span>
                             </div>
-                            <div class="grid grid-cols-2 gap-1 pt-0.5">
+                            <div class="grid grid-cols-2 gap-1.5 pt-0.5">
                                 <div>
-                                    <label class="block text-[9px] text-slate-500">จำนวนงวด (เดือน)</label>
-                                    <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 focus:outline-none text-xs">
+                                    <label class="block text-[10px] text-slate-500 mb-0.5">จำนวนงวด (เดือน)</label>
+                                    <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1 font-bold text-slate-800 focus:outline-none text-xs">
                                         <option value="36">36</option>
                                         <option value="48">48</option>
                                         <option value="60" selected>60</option>
@@ -214,96 +214,96 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-[9px] text-slate-500">อัตราดอกเบี้ย (%)</label>
-                                    <input type="number" step="0.01" id="interestRate" value="2.59" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none text-xs">
+                                    <label class="block text-[10px] text-slate-500 mb-0.5">อัตราดอกเบี้ย (%)</label>
+                                    <input type="number" step="0.01" id="interestRate" value="2.59" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1 font-bold text-slate-800 text-right focus:outline-none text-xs">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[9px] text-slate-500">สถาบันการเงิน / ไฟแนนซ์</label>
-                                <input type="text" id="financeBank" placeholder="เช่น กรุงศรีออโต้" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 text-[10px] focus:outline-none">
+                                <label class="block text-[10px] text-slate-500 mb-0.5">สถาบันการเงิน / ไฟแนนซ์</label>
+                                <input type="text" id="financeBank" placeholder="เช่น กรุงศรีออโต้" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1 text-xs focus:outline-none">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Col 3: Delivery Expenses -->
-                <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="text-[11px] font-bold text-slate-500 mb-1.5 border-b pb-0.5">3. ค่าใช้จ่ายวันรับรถ</h4>
-                        <div class="space-y-1 text-[11px]">
+                        <h4 class="text-xs font-bold text-slate-500 mb-2 border-b pb-1">3. ค่าใช้จ่ายวันรับรถ</h4>
+                        <div class="space-y-1.5 text-xs">
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-600">เงินดาวน์สุทธิ:</span>
                                 <span id="dispDown" class="font-bold text-slate-900">0 ฿</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-600">มัดจำป้ายแดง:</span>
-                                <input type="number" id="redPlate" value="3000" oninput="calculate()" class="w-16 bg-slate-50 border rounded px-1 text-right font-semibold">
+                                <input type="number" id="redPlate" value="3000" oninput="calculate()" class="w-16 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-semibold">
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-600">หัก มัดจำจอง:</span>
-                                <input type="number" id="bookingFee" value="5000" oninput="calculate()" class="w-16 bg-slate-50 border rounded px-1 text-right font-semibold text-red-600">
+                                <input type="number" id="bookingFee" value="5000" oninput="calculate()" class="w-16 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-semibold text-red-600">
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-slate-600">หัก ส่วนลดดาวน์:</span>
-                                <input type="number" id="downDiscount" value="10000" oninput="calculate()" class="w-16 bg-slate-50 border rounded px-1 text-right font-semibold text-red-600">
+                                <input type="number" id="downDiscount" value="10000" oninput="calculate()" class="w-16 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-semibold text-red-600">
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2 pt-1 border-t border-slate-100 flex justify-between items-baseline">
-                        <span class="text-[10px] font-bold text-emerald-800">รวมจ่ายวันรับรถ:</span>
-                        <span id="netDelivery" class="text-sm font-extrabold text-emerald-600">0 ฿</span>
+                    <div class="mt-3 pt-1.5 border-t border-slate-100 flex justify-between items-baseline">
+                        <span class="text-xs font-bold text-emerald-800">รวมจ่ายวันรับรถ:</span>
+                        <span id="netDelivery" class="text-base font-extrabold text-emerald-600">0 ฿</span>
                     </div>
                 </div>
 
             </div>
 
             <!-- Dark Navy Highlight Banner for Finance Summary -->
-            <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-xl px-3 py-2 flex justify-between items-center gap-2 shadow-sm print-banner-bg">
-                <div class="text-[10px] space-y-0.5 text-slate-300">
+            <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-xl px-4 py-2.5 flex justify-between items-center gap-3 shadow-sm print-banner-bg">
+                <div class="text-xs space-y-0.5 text-slate-300">
                     <div>ยอดจัดไฟแนนซ์: <span id="financeAmount" class="font-bold text-white">0 บาท</span></div>
                     <div>ดอกเบี้ยรวมทั้งหมด: <span id="totalInterest" class="font-bold text-white">0 บาท</span></div>
                 </div>
                 <div class="text-right">
-                    <div class="text-[10px] text-slate-300">ผ่อนประมาณเดือนละ:</div>
-                    <div id="monthlyPayment" class="text-xl sm:text-2xl font-extrabold text-amber-400 monthly-highlight">0 บาท/เดือน</div>
+                    <div class="text-xs text-slate-300">ผ่อนประมาณเดือนละ:</div>
+                    <div id="monthlyPayment" class="text-2xl sm:text-3xl font-extrabold text-amber-400 monthly-highlight">0 บาท/เดือน</div>
                 </div>
             </div>
 
         </div>
 
         <!-- Section 3: Freebies & Accessories -->
-        <div class="mb-3 print-compact-mb">
-            <h3 class="text-xs font-bold text-slate-800 mb-1.5">
-                🎁 รายการของแถม & อุปกรณ์ตกแต่ง <span class="text-slate-400 font-normal text-[10px]">(Freebies & Accessories)</span>
+        <div class="mb-4">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2">
+                🎁 รายการของแถม & อุปกรณ์ตกแต่ง <span class="text-slate-400 font-normal text-xs">(Freebies & Accessories)</span>
             </h3>
             
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-3.5">
                 <!-- Standard Freebies -->
-                <div class="bg-slate-50/80 p-2.5 rounded-xl border border-slate-200 print-card-bg print-compact-p">
-                    <div class="flex justify-between items-center mb-1 border-b pb-1">
-                        <span class="text-[11px] font-bold text-slate-700">รายการของแถมมาตรฐาน</span>
-                        <button onclick="addFreebie('standard-container', '')" class="btn-add text-[10px] text-blue-600 font-bold hover:underline no-print">+ เพิ่ม</button>
+                <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200 print-card-bg">
+                    <div class="flex justify-between items-center mb-1.5 border-b pb-1">
+                        <span class="text-xs font-bold text-slate-700">รายการของแถมมาตรฐาน</span>
+                        <button onclick="addFreebie('standard-container', '')" class="btn-add text-xs text-blue-600 font-bold hover:underline no-print">+ เพิ่ม</button>
                     </div>
-                    <div id="standard-container" class="space-y-0.5"></div>
+                    <div id="standard-container" class="space-y-1"></div>
                 </div>
 
                 <!-- Special Freebies -->
-                <div class="bg-slate-50/80 p-2.5 rounded-xl border border-slate-200 print-card-bg print-compact-p">
-                    <div class="flex justify-between items-center mb-1 border-b pb-1">
-                        <span class="text-[11px] font-bold text-slate-700">รายการพิเศษเพิ่มเติม</span>
-                        <button onclick="addFreebie('special-container', '')" class="btn-add text-[10px] text-blue-600 font-bold hover:underline no-print">+ เพิ่ม</button>
+                <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-200 print-card-bg">
+                    <div class="flex justify-between items-center mb-1.5 border-b pb-1">
+                        <span class="text-xs font-bold text-slate-700">รายการพิเศษเพิ่มเติม</span>
+                        <button onclick="addFreebie('special-container', '')" class="btn-add text-xs text-blue-600 font-bold hover:underline no-print">+ เพิ่ม</button>
                     </div>
-                    <div id="special-container" class="space-y-0.5"></div>
+                    <div id="special-container" class="space-y-1"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Section 4: Campaign Terms (At Very Bottom) -->
-        <div class="bg-amber-50/60 border border-amber-200/80 rounded-xl p-2.5 text-xs print-compact-p">
-            <label class="block font-bold text-amber-900 mb-1 flex items-center gap-1 text-[11px]">
+        <!-- Section 4: Campaign Terms (At Bottom) -->
+        <div class="bg-amber-50/60 border border-amber-200/80 rounded-xl p-3 text-xs">
+            <label class="block font-bold text-amber-900 mb-1 flex items-center gap-1 text-xs">
                 📢 เงื่อนไขแคมเปญ / โปรโมชันพิเศษ ✏️
             </label>
-            <textarea id="campaignTerm" rows="2" class="w-full bg-white/80 border border-amber-200 rounded p-1.5 text-slate-700 text-[11px] focus:outline-none focus:bg-white resize-none" placeholder="ระบุรายละเอียดโปรโมชัน..."></textarea>
+            <textarea id="campaignTerm" rows="2" class="w-full bg-white/80 border border-amber-200 rounded-lg p-2 text-slate-700 text-xs focus:outline-none focus:bg-white resize-none" placeholder="ระบุรายละเอียดโปรโมชัน..."></textarea>
         </div>
 
     </div>
@@ -329,11 +329,11 @@
         function addFreebie(containerId, textValue) {
             const container = document.getElementById(containerId);
             const div = document.createElement('div');
-            div.className = 'flex items-center gap-1 freebie-item';
+            div.className = 'flex items-center gap-1.5 freebie-item';
             div.innerHTML = `
-                <span class="text-blue-500 font-bold text-[11px]">✓</span>
-                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="flex-1 bg-white border border-slate-200 rounded px-1.5 py-0.5 text-[11px] focus:outline-none">
-                <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-1 text-[10px] no-print">🗑️</button>
+                <span class="text-blue-500 font-bold text-xs">✓</span>
+                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="flex-1 bg-white border border-slate-200 rounded px-2 py-0.5 text-xs focus:outline-none">
+                <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-1 text-xs no-print">🗑️</button>
             `;
             container.appendChild(div);
         }
@@ -353,15 +353,15 @@
             const financeSummaryBanner = document.getElementById('financeSummaryBanner');
 
             if (type === 'cash') {
-                btnCash.className = "py-1 px-3 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center gap-1";
-                btnFinance.className = "py-1 px-3 rounded-md text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1";
+                btnCash.className = "py-1 px-3.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center gap-1.5";
+                btnFinance.className = "py-1 px-3.5 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
                 
                 financeCol.style.opacity = '0.3';
                 financeCol.style.pointerEvents = 'none';
                 financeSummaryBanner.style.display = 'none';
             } else {
-                btnFinance.className = "py-1 px-3 rounded-md text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center gap-1";
-                btnCash.className = "py-1 px-3 rounded-md text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1";
+                btnFinance.className = "py-1 px-3.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center gap-1.5";
+                btnCash.className = "py-1 px-3.5 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
                 
                 financeCol.style.opacity = '1';
                 financeCol.style.pointerEvents = 'auto';
