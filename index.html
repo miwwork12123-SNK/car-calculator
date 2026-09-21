@@ -13,7 +13,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 3mm 5mm;
+                margin: 4mm 6mm;
             }
             html, body {
                 height: 100%;
@@ -22,7 +22,7 @@
                 color: black !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 10px !important;
+                font-size: 9.5px !important;
             }
             .no-print {
                 display: none !important;
@@ -37,12 +37,12 @@
             .print-grid {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr !important;
-                gap: 6px !important;
+                gap: 5px !important;
             }
             .print-card {
                 background: #f8fafc !important;
                 border: 1px solid #cbd5e1 !important;
-                padding: 5px !important;
+                padding: 4px 6px !important;
                 border-radius: 4px !important;
             }
             input, select {
@@ -60,22 +60,16 @@
                 padding: 0 !important;
             }
             .section-title {
-                font-size: 11px !important;
+                font-size: 10.5px !important;
                 font-weight: bold !important;
-                border-bottom: 1.5px solid #0f172a !important;
+                border-bottom: 1px solid #0f172a !important;
                 padding-bottom: 1px !important;
-                margin-bottom: 3px !important;
+                margin-bottom: 2px !important;
             }
             .freebie-container {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr !important;
-                gap: 2px 6px !important;
-            }
-            .signature-area {
-                display: flex !important;
-                margin-top: 8px !important;
-                padding-top: 4px !important;
-                page-break-inside: avoid !important;
+                gap: 1px 4px !important;
             }
         }
     </style>
@@ -84,9 +78,9 @@
     <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-3 sm:p-6 print-container">
         
         <!-- Header & Action Buttons -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 mb-2 gap-2">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-1.5 mb-1.5 gap-2">
             <div>
-                <h1 class="text-lg sm:text-xl font-bold text-slate-900">🚗 ใบเสนอราคา & คำนวณค่างวดรถยนต์</h1>
+                <h1 class="text-base sm:text-lg font-bold text-slate-900">🚗 ใบเสนอราคา & คำนวณค่างวดรถยนต์</h1>
             </div>
             <div class="flex gap-2 no-print w-full sm:w-auto">
                 <button onclick="copyToChat()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium py-1.5 px-3 rounded-lg flex items-center justify-center gap-1">
@@ -99,17 +93,17 @@
         </div>
 
         <!-- Editable Campaign Term -->
-        <div class="bg-amber-50 border border-amber-200 rounded p-1.5 mb-2 text-xs">
+        <div class="bg-amber-50 border border-amber-200 rounded p-1 mb-1.5 text-xs">
             <label class="block font-bold text-amber-800 mb-0.5">📌 เงื่อนไขแคมเปญ ✏️</label>
             <input type="text" id="campaignTerm" value="เงื่อนไขแคมเปญ จอง และรับรถ ภายในวันที่ 30 กันยายน 2569" class="w-full bg-white border border-amber-300 rounded px-1.5 py-0.5 text-slate-800 font-medium focus:outline-none">
         </div>
 
         <!-- Info Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2 text-xs print-grid">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-1.5 mb-1.5 text-xs print-grid">
             <!-- Customer Info -->
-            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card">
-                <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-1.5">👤 ข้อมูลลูกค้า</h3>
-                <div class="space-y-1">
+            <div class="bg-slate-50 p-1.5 rounded border border-slate-200 print-card">
+                <h3 class="section-title text-slate-800 font-bold border-b pb-0.5 mb-1">👤 ข้อมูลลูกค้า</h3>
+                <div class="space-y-0.5">
                     <div class="flex items-center gap-1">
                         <span class="w-14 font-medium text-slate-600">วันที่:</span>
                         <input type="date" id="docDate" class="flex-1 bg-white border rounded px-1 py-0.5">
@@ -130,9 +124,9 @@
             </div>
 
             <!-- Vehicle Info -->
-            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card">
-                <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-1.5">🚘 ข้อมูลการซื้อ</h3>
-                <div class="space-y-1">
+            <div class="bg-slate-50 p-1.5 rounded border border-slate-200 print-card">
+                <h3 class="section-title text-slate-800 font-bold border-b pb-0.5 mb-1">🚘 ข้อมูลการซื้อ</h3>
+                <div class="space-y-0.5">
                     <div class="flex items-center gap-1">
                         <span class="w-16 font-medium text-slate-600">รูปแบบ:</span>
                         <select id="purchaseType" onchange="togglePurchaseType()" class="flex-1 bg-white border rounded px-1 py-0.5">
@@ -156,9 +150,9 @@
             </div>
 
             <!-- Sales Rep Info -->
-            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card">
-                <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-1.5">👨‍💼 ที่ปรึกษาการขาย</h3>
-                <div class="space-y-1">
+            <div class="bg-slate-50 p-1.5 rounded border border-slate-200 print-card">
+                <h3 class="section-title text-slate-800 font-bold border-b pb-0.5 mb-1">👨‍💼 ที่ปรึกษาการขาย</h3>
+                <div class="space-y-0.5">
                     <div class="flex items-center gap-1">
                         <span class="w-16 font-medium text-slate-600">ชื่อเซลส์:</span>
                         <input type="text" id="salesName" placeholder="ระบุชื่อเซลส์" class="flex-1 bg-white border rounded px-1 py-0.5">
@@ -176,11 +170,11 @@
         </div>
 
         <!-- Calculations -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2 text-xs print-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 mb-1.5 text-xs print-grid">
             <!-- Financial Inputs -->
-            <div class="bg-slate-50 p-2.5 rounded border border-slate-200 print-card">
-                <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-1.5">💰 ตัวเลขคำนวณการเงิน</h3>
-                <div class="space-y-1">
+            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card">
+                <h3 class="section-title text-slate-800 font-bold border-b pb-0.5 mb-1">💰 ตัวเลขคำนวณการเงิน</h3>
+                <div class="space-y-0.5">
                     <div class="flex justify-between items-center gap-1">
                         <label class="font-medium text-slate-700">ราคารถยนต์ (บาท):</label>
                         <input type="number" id="price" value="709900" oninput="calculate()" class="w-28 bg-white border rounded px-1.5 py-0.5 text-right font-semibold">
@@ -190,7 +184,7 @@
                         <input type="number" id="cashDiscount" value="30000" oninput="calculate()" class="w-28 bg-white border rounded px-1.5 py-0.5 text-right font-semibold">
                     </div>
 
-                    <div id="financeInputs" class="space-y-1 border-t pt-1">
+                    <div id="financeInputs" class="space-y-0.5 border-t pt-0.5">
                         <div class="flex justify-between items-center gap-1">
                             <div class="flex items-center gap-1">
                                 <label class="font-medium text-slate-700">เงินดาวน์:</label>
@@ -218,7 +212,7 @@
                     </div>
                 </div>
 
-                <div class="mt-2 pt-1 border-t border-slate-300 space-y-0.5">
+                <div class="mt-1.5 pt-0.5 border-t border-slate-300 space-y-0.5">
                     <div class="flex justify-between">
                         <span class="text-slate-600">ราคาสุทธิ:</span>
                         <span id="netPrice" class="font-semibold text-slate-900">0 บาท</span>
@@ -228,7 +222,7 @@
                             <span class="text-slate-600">ยอดจัดไฟแนนซ์:</span>
                             <span id="financeAmount" class="font-semibold text-slate-900">0 บาท</span>
                         </div>
-                        <div class="flex justify-between text-blue-900 font-bold bg-blue-50 p-1 rounded mt-0.5">
+                        <div class="flex justify-between text-blue-900 font-bold bg-blue-50 p-0.5 px-1 rounded mt-0.5">
                             <span>ค่างวดประมาณ:</span>
                             <span id="monthlyPayment">0 บาท/เดือน</span>
                         </div>
@@ -237,10 +231,10 @@
             </div>
 
             <!-- Delivery Expenses -->
-            <div class="bg-slate-50 p-2.5 rounded border border-slate-200 print-card flex flex-col justify-between">
+            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card flex flex-col justify-between">
                 <div>
-                    <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-1.5">💵 ค่าใช้จ่ายวันรับรถ</h3>
-                    <div class="space-y-1">
+                    <h3 class="section-title text-slate-800 font-bold border-b pb-0.5 mb-1">💵 ค่าใช้จ่ายวันรับรถ</h3>
+                    <div class="space-y-0.5">
                         <div class="flex justify-between items-center">
                             <span class="text-slate-700 font-medium">เงินดาวน์:</span>
                             <span id="dispDown" class="font-semibold text-slate-900">0 บาท</span>
@@ -269,7 +263,7 @@
                     </div>
                 </div>
 
-                <div class="mt-2 pt-1 border-t border-red-200 bg-red-50 p-1.5 rounded">
+                <div class="mt-1.5 pt-0.5 border-t border-red-200 bg-red-50 p-1 rounded">
                     <div class="flex justify-between items-center text-red-900 font-bold">
                         <span>ยอดสุทธิวันรับรถ:</span>
                         <span id="netDelivery">0 บาท</span>
@@ -279,8 +273,8 @@
         </div>
 
         <!-- Freebies -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs print-grid">
-            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-xs print-grid">
+            <div class="bg-slate-50 p-1.5 rounded border border-slate-200 print-card">
                 <div class="flex justify-between items-center border-b pb-0.5 mb-1">
                     <h3 class="section-title text-slate-800 font-bold m-0 border-none">🎁 รายการของแถมมาตรฐาน</h3>
                     <button onclick="addFreebie('standard-freebies-container', '')" class="btn-add bg-emerald-600 text-white px-1.5 py-0.5 rounded text-xs no-print">+ เพิ่ม</button>
@@ -288,24 +282,12 @@
                 <div id="standard-freebies-container" class="space-y-0.5 freebie-container"></div>
             </div>
 
-            <div class="bg-slate-50 p-2 rounded border border-slate-200 print-card">
+            <div class="bg-slate-50 p-1.5 rounded border border-slate-200 print-card">
                 <div class="flex justify-between items-center border-b pb-0.5 mb-1">
                     <h3 class="section-title text-slate-800 font-bold m-0 border-none">🌟 รายการของแถมพิเศษ</h3>
                     <button onclick="addFreebie('special-freebies-container', '')" class="btn-add bg-emerald-600 text-white px-1.5 py-0.5 rounded text-xs no-print">+ เพิ่ม</button>
                 </div>
                 <div id="special-freebies-container" class="space-y-0.5 freebie-container"></div>
-            </div>
-        </div>
-
-        <!-- Signatures -->
-        <div class="hidden print:flex signature-area justify-between items-end border-t text-xs text-center">
-            <div class="w-5/12">
-                <div class="border-b border-dashed border-slate-400 h-6 mb-1"></div>
-                <p>ลงนาม ที่ปรึกษาการขาย</p>
-            </div>
-            <div class="w-5/12">
-                <div class="border-b border-dashed border-slate-400 h-6 mb-1"></div>
-                <p>ลงนาม ลูกค้าผู้ขอเสนอราคา</p>
             </div>
         </div>
     </div>
