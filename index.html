@@ -9,11 +9,11 @@
     <style>
         * { font-family: 'Prompt', sans-serif; }
         
-        /* Optimized Full A4 Page Print Style Fix */
+        /* Full A4 Print Layout Optimization */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 8mm 10mm;
+                margin: 10mm 12mm;
             }
             html, body {
                 height: 100% !important;
@@ -21,8 +21,8 @@
                 color: black !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 13.5px !important;
-                line-height: 1.5 !important;
+                font-size: 14px !important;
+                line-height: 1.6 !important;
             }
             .no-print {
                 display: none !important;
@@ -33,34 +33,34 @@
                 padding: 0 !important;
                 max-width: 100% !important;
                 margin: 0 !important;
-                height: 98% !important;
+                height: 100% !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: space-between !important;
             }
             .print-header {
-                font-size: 20px !important;
-                margin-bottom: 8px !important;
+                font-size: 22px !important;
+                margin-bottom: 12px !important;
             }
             .print-campaign {
-                padding: 10px 14px !important;
-                font-size: 14px !important;
-                margin-bottom: 12px !important;
+                padding: 12px 16px !important;
+                font-size: 15px !important;
+                margin-bottom: 18px !important;
             }
             .print-grid {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr !important;
-                gap: 14px !important;
+                gap: 18px !important;
             }
             .print-grid-3 {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr 1fr !important;
-                gap: 12px !important;
+                gap: 16px !important;
             }
             .print-card {
                 background: #f8fafc !important;
                 border: 1px solid #cbd5e1 !important;
-                padding: 12px 14px !important;
+                padding: 16px 18px !important;
                 border-radius: 8px !important;
             }
             input, select {
@@ -70,31 +70,40 @@
                 font-weight: 600 !important;
                 color: black !important;
                 appearance: none !important;
-                font-size: 13.5px !important;
+                font-size: 14px !important;
             }
             .btn-del, .btn-add {
                 display: none !important;
             }
             .freebie-item {
-                padding: 4px 0 !important;
+                padding: 6px 0 !important;
             }
             .freebie-item input {
-                font-size: 13px !important;
+                font-size: 13.5px !important;
             }
             .section-title {
-                font-size: 15px !important;
+                font-size: 16px !important;
                 font-weight: bold !important;
                 border-bottom: 2px solid #0f172a !important;
                 padding-bottom: 6px !important;
-                margin-bottom: 10px !important;
+                margin-bottom: 12px !important;
             }
             .freebie-container {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr !important;
-                gap: 6px 12px !important;
+                gap: 8px 14px !important;
             }
             .space-y-print > * + * {
-                margin-top: 8px !important;
+                margin-top: 10px !important;
+            }
+            /* Highlight Large Monthly Payment in Print */
+            .monthly-highlight {
+                font-size: 20px !important;
+                font-weight: 800 !important;
+            }
+            .delivery-highlight {
+                font-size: 18px !important;
+                font-weight: 800 !important;
             }
         }
     </style>
@@ -104,7 +113,7 @@
         
         <div>
             <!-- Header & Action Buttons -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 mb-3 gap-2">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 mb-4 gap-2">
                 <div>
                     <h1 class="text-lg sm:text-2xl font-bold text-slate-900 print-header">🚗 ใบเสนอราคา & คำนวณค่างวดรถยนต์</h1>
                 </div>
@@ -119,17 +128,17 @@
             </div>
 
             <!-- Editable Campaign Term -->
-            <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 mb-3 text-xs sm:text-sm print-campaign">
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-xs sm:text-sm print-campaign">
                 <label class="block font-bold text-amber-800 mb-1">📌 เงื่อนไขแคมเปญ ✏️</label>
                 <input type="text" id="campaignTerm" value="เงื่อนไขแคมเปญ จอง และรับรถ ภายในวันที่ 30 กันยายน 2569" class="w-full bg-white border border-amber-300 rounded px-2 py-1 text-slate-800 font-medium focus:outline-none">
             </div>
 
             <!-- Info Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3 text-xs sm:text-sm print-grid-3">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 text-xs sm:text-sm print-grid-3">
                 <!-- Customer Info -->
-                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 print-card">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
                     <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">👤 ข้อมูลลูกค้า</h3>
-                    <div class="space-y-1.5 space-y-print">
+                    <div class="space-y-2 space-y-print">
                         <div class="flex items-center gap-1">
                             <span class="w-16 font-medium text-slate-600">วันที่:</span>
                             <input type="date" id="docDate" class="flex-1 bg-white border rounded px-1.5 py-0.5">
@@ -150,14 +159,14 @@
                 </div>
 
                 <!-- Vehicle Info -->
-                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 print-card">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
                     <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">🚘 ข้อมูลการซื้อ</h3>
-                    <div class="space-y-1.5 space-y-print">
+                    <div class="space-y-2 space-y-print">
                         <div class="flex items-center gap-1">
                             <span class="w-16 font-medium text-slate-600">รูปแบบ:</span>
-                            <select id="purchaseType" onchange="togglePurchaseType()" class="flex-1 bg-white border rounded px-1.5 py-0.5">
+                            <select id="purchaseType" onchange="togglePurchaseType()" class="flex-1 bg-white border rounded px-1.5 py-0.5 font-bold text-blue-700">
                                 <option value="finance">จัดไฟแนนซ์</option>
-                                <option value="cash">ซื้อเงินสด</option>
+                                <option value="cash">ซื้อสด</option>
                             </select>
                         </div>
                         <div class="flex items-center gap-1">
@@ -176,9 +185,9 @@
                 </div>
 
                 <!-- Sales Rep Info -->
-                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 print-card">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
                     <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">👨‍💼 ที่ปรึกษาการขาย</h3>
-                    <div class="space-y-1.5 space-y-print">
+                    <div class="space-y-2 space-y-print">
                         <div class="flex items-center gap-1">
                             <span class="w-16 font-medium text-slate-600">ชื่อเซลส์:</span>
                             <input type="text" id="salesName" placeholder="ระบุชื่อเซลส์" class="flex-1 bg-white border rounded px-1.5 py-0.5">
@@ -196,12 +205,12 @@
             </div>
 
             <!-- Calculations -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 text-xs sm:text-sm print-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-xs sm:text-sm print-grid">
                 <!-- Financial Inputs -->
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 print-card flex flex-col justify-between">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card flex flex-col justify-between">
                     <div>
                         <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">💰 ตัวเลขคำนวณการเงิน</h3>
-                        <div class="space-y-1.5 space-y-print">
+                        <div class="space-y-2 space-y-print">
                             <div class="flex justify-between items-center gap-1">
                                 <label class="font-medium text-slate-700">ราคารถยนต์ (บาท):</label>
                                 <input type="number" id="price" value="709900" oninput="calculate()" class="w-32 bg-white border rounded px-2 py-0.5 text-right font-semibold">
@@ -211,7 +220,7 @@
                                 <input type="number" id="cashDiscount" value="30000" oninput="calculate()" class="w-32 bg-white border rounded px-2 py-0.5 text-right font-semibold">
                             </div>
 
-                            <div id="financeInputs" class="space-y-1.5 space-y-print border-t pt-1.5">
+                            <div id="financeInputs" class="space-y-2 space-y-print border-t pt-2">
                                 <div class="flex justify-between items-center gap-1">
                                     <div class="flex items-center gap-1">
                                         <label class="font-medium text-slate-700">เงินดาวน์:</label>
@@ -240,26 +249,27 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-3 border-t border-slate-300 space-y-1.5">
+                    <div class="mt-4 pt-3 border-t border-slate-300 space-y-2">
                         <div class="flex justify-between">
-                            <span class="text-slate-600">ราคาสุทธิ:</span>
-                            <span id="netPrice" class="font-semibold text-slate-900">0 บาท</span>
+                            <span class="text-slate-600 font-medium">ราคาสุทธิ:</span>
+                            <span id="netPrice" class="font-bold text-slate-900">0 บาท</span>
                         </div>
                         <div id="financeSummaryRows">
                             <div class="flex justify-between">
-                                <span class="text-slate-600">ยอดจัดไฟแนนซ์:</span>
-                                <span id="financeAmount" class="font-semibold text-slate-900">0 บาท</span>
+                                <span class="text-slate-600 font-medium">ยอดจัดไฟแนนซ์:</span>
+                                <span id="financeAmount" class="font-bold text-slate-900">0 บาท</span>
                             </div>
-                            <div class="flex justify-between text-blue-900 font-bold bg-blue-50 p-2 rounded-lg mt-1.5">
-                                <span>ค่างวดประมาณ:</span>
-                                <span id="monthlyPayment">0 บาท/เดือน</span>
+                            <!-- Prominent Monthly Payment Box -->
+                            <div class="flex justify-between items-center text-blue-950 font-bold bg-blue-100/80 border border-blue-200 p-2.5 rounded-lg mt-2">
+                                <span class="text-base sm:text-lg">ค่างวดประมาณ:</span>
+                                <span id="monthlyPayment" class="text-xl sm:text-2xl text-blue-700 monthly-highlight">0 บาท/เดือน</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Delivery Expenses -->
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 print-card flex flex-col justify-between">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card flex flex-col justify-between">
                     <div>
                         <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">💵 ค่าใช้จ่ายวันรับรถ</h3>
                         <div class="space-y-2 space-y-print">
@@ -291,18 +301,18 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-3 border-t border-red-200 bg-red-50 p-2.5 rounded-lg">
+                    <div class="mt-4 pt-3 border-t border-red-200 bg-red-50 p-2.5 rounded-lg border border-red-200">
                         <div class="flex justify-between items-center text-red-900 font-bold">
-                            <span>ยอดสุทธิวันรับรถ:</span>
-                            <span id="netDelivery">0 บาท</span>
+                            <span class="text-base">ยอดสุทธิวันรับรถ:</span>
+                            <span id="netDelivery" class="text-lg sm:text-xl text-red-700 delivery-highlight">0 บาท</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Freebies -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm print-grid">
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 print-card">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm print-grid">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
                     <div class="flex justify-between items-center border-b pb-1 mb-2">
                         <h3 class="section-title text-slate-800 font-bold m-0 border-none">🎁 รายการของแถมมาตรฐาน</h3>
                         <button onclick="addFreebie('standard-freebies-container', '')" class="btn-add bg-emerald-600 text-white px-2 py-0.5 rounded text-xs no-print">+ เพิ่ม</button>
@@ -310,7 +320,7 @@
                     <div id="standard-freebies-container" class="freebie-container"></div>
                 </div>
 
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 print-card">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
                     <div class="flex justify-between items-center border-b pb-1 mb-2">
                         <h3 class="section-title text-slate-800 font-bold m-0 border-none">🌟 รายการของแถมพิเศษ</h3>
                         <button onclick="addFreebie('special-freebies-container', '')" class="btn-add bg-emerald-600 text-white px-2 py-0.5 rounded text-xs no-print">+ เพิ่ม</button>
@@ -447,7 +457,7 @@
             const custName = document.getElementById('custName').value || '-';
             const carModel = document.getElementById('carModel').value || '-';
             const carColor = document.getElementById('carColor').value || '-';
-            const purchaseType = document.getElementById('purchaseType').value === 'cash' ? 'เงินสด' : 'จัดไฟแนนซ์';
+            const purchaseType = document.getElementById('purchaseType').value === 'cash' ? 'ซื้อสด' : 'จัดไฟแนนซ์';
             
             const netPrice = document.getElementById('netPrice').innerText;
             const monthlyPayment = document.getElementById('monthlyPayment').innerText;
