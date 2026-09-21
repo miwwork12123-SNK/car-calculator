@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ใบเสนอราคา & คำนวณค่างวดรถยนต์</title>
+    <title>ใบเสนอราคาและตารางค่างวดรถยนต์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Prompt', sans-serif; }
         
-        /* Full A4 Print Layout Optimization */
+        /* Full A4 Print Optimization */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm 12mm;
+                margin: 8mm 10mm;
             }
             html, body {
                 height: 100% !important;
@@ -21,363 +21,355 @@
                 color: black !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 14px !important;
-                line-height: 1.6 !important;
+                font-size: 13px !important;
+                line-height: 1.4 !important;
             }
-            .no-print {
-                display: none !important;
-            }
+            .no-print { display: none !important; }
             .print-container {
                 box-shadow: none !important;
                 border: none !important;
                 padding: 0 !important;
                 max-width: 100% !important;
                 margin: 0 !important;
-                height: 100% !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: space-between !important;
             }
-            .print-header {
-                font-size: 22px !important;
-                margin-bottom: 12px !important;
-            }
-            .print-campaign {
-                padding: 12px 16px !important;
-                font-size: 15px !important;
-                margin-bottom: 18px !important;
-            }
-            .print-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 18px !important;
-            }
-            .print-grid-3 {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr 1fr !important;
-                gap: 16px !important;
-            }
-            .print-card {
-                background: #f8fafc !important;
-                border: 1px solid #cbd5e1 !important;
-                padding: 16px 18px !important;
-                border-radius: 8px !important;
-            }
-            input, select {
+            input, select, textarea {
                 border: none !important;
                 background: transparent !important;
                 padding: 0 !important;
                 font-weight: 600 !important;
                 color: black !important;
                 appearance: none !important;
-                font-size: 14px !important;
+                box-shadow: none !important;
             }
-            .btn-del, .btn-add {
-                display: none !important;
-            }
-            .freebie-item {
-                padding: 6px 0 !important;
-            }
-            .freebie-item input {
-                font-size: 13.5px !important;
-            }
-            .section-title {
-                font-size: 16px !important;
-                font-weight: bold !important;
-                border-bottom: 2px solid #0f172a !important;
-                padding-bottom: 6px !important;
-                margin-bottom: 12px !important;
-            }
-            .freebie-container {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 8px 14px !important;
-            }
-            .space-y-print > * + * {
-                margin-top: 10px !important;
-            }
-            /* Highlight Large Monthly Payment in Print */
+            .btn-del, .btn-add { display: none !important; }
             .monthly-highlight {
-                font-size: 20px !important;
+                font-size: 24px !important;
                 font-weight: 800 !important;
             }
-            .delivery-highlight {
-                font-size: 18px !important;
-                font-weight: 800 !important;
+            .print-card-bg {
+                background-color: #f8fafc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .print-banner-bg {
+                background-color: #1e293b !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen p-2 sm:p-6 text-slate-800">
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-4 sm:p-8 print-container">
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-4 sm:p-8 print-container">
         
-        <div>
-            <!-- Header & Action Buttons -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 mb-4 gap-2">
-                <div>
-                    <h1 class="text-lg sm:text-2xl font-bold text-slate-900 print-header">🚗 ใบเสนอราคา & คำนวณค่างวดรถยนต์</h1>
+        <!-- Header Section -->
+        <div class="flex justify-between items-start border-b pb-4 mb-5">
+            <div>
+                <span class="inline-block bg-slate-100 text-slate-500 font-bold text-[10px] sm:text-xs px-2.5 py-1 rounded-full mb-1 tracking-wider">OFFICIAL SALES QUOTATION</span>
+                <h1 class="text-xl sm:text-2xl font-bold text-slate-900">ใบเสนอราคาและตารางค่างวดรถยนต์</h1>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <div class="bg-slate-50 border rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs sm:text-sm">
+                    <span class="text-slate-500 font-medium">วันที่เสนอราคา:</span>
+                    <input type="date" id="docDate" class="bg-transparent font-bold text-slate-800 focus:outline-none">
                 </div>
-                <div class="flex gap-2 no-print w-full sm:w-auto">
-                    <button onclick="copyToChat()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium py-2 px-3 rounded-lg flex items-center justify-center gap-1">
+                <!-- Action Buttons -->
+                <div class="flex gap-2 no-print">
+                    <button onclick="copyToChat()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium py-1.5 px-3 rounded-lg flex items-center gap-1 shadow-sm transition">
                         📋 คัดลอกลงแชท
                     </button>
-                    <button onclick="window.print()" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-2 px-3 rounded-lg flex items-center justify-center gap-1">
+                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-1.5 px-3 rounded-lg flex items-center gap-1 shadow-sm transition">
                         🖨️ พิมพ์ / บันทึก PDF
                     </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Editable Campaign Term -->
-            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-xs sm:text-sm print-campaign">
-                <label class="block font-bold text-amber-800 mb-1">📌 เงื่อนไขแคมเปญ ✏️</label>
-                <input type="text" id="campaignTerm" value="เงื่อนไขแคมเปญ จอง และรับรถ ภายในวันที่ 30 กันยายน 2569" class="w-full bg-white border border-amber-300 rounded px-2 py-1 text-slate-800 font-medium focus:outline-none">
-            </div>
-
-            <!-- Info Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 text-xs sm:text-sm print-grid-3">
-                <!-- Customer Info -->
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
-                    <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">👤 ข้อมูลลูกค้า</h3>
-                    <div class="space-y-2 space-y-print">
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">วันที่:</span>
-                            <input type="date" id="docDate" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">ชื่อลูกค้า:</span>
-                            <input type="text" id="custName" placeholder="ระบุชื่อลูกค้า" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">เบอร์โทร:</span>
-                            <input type="text" id="custPhone" placeholder="08X-XXX-XXXX" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">LINE ID:</span>
-                            <input type="text" id="custLine" placeholder="ไอดีไลน์" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vehicle Info -->
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
-                    <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">🚘 ข้อมูลการซื้อ</h3>
-                    <div class="space-y-2 space-y-print">
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">รูปแบบ:</span>
-                            <select id="purchaseType" onchange="togglePurchaseType()" class="flex-1 bg-white border rounded px-1.5 py-0.5 font-bold text-blue-700">
-                                <option value="finance">จัดไฟแนนซ์</option>
-                                <option value="cash">ซื้อสด</option>
-                            </select>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">รุ่นรถ:</span>
-                            <input type="text" id="carModel" value="MG4 ELECTRIC" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">สีรถ:</span>
-                            <input type="text" id="carColor" placeholder="ระบุสีรถ" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1" id="financeRow">
-                            <span class="w-16 font-medium text-slate-600">ไฟแนนซ์:</span>
-                            <input type="text" id="financeBank" placeholder="สถาบันไฟแนนซ์" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sales Rep Info -->
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
-                    <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">👨‍💼 ที่ปรึกษาการขาย</h3>
-                    <div class="space-y-2 space-y-print">
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">ชื่อเซลส์:</span>
-                            <input type="text" id="salesName" placeholder="ระบุชื่อเซลส์" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">เบอร์โทร:</span>
-                            <input type="text" id="salesPhone" placeholder="08X-XXX-XXXX" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <span class="w-16 font-medium text-slate-600">LINE ID:</span>
-                            <input type="text" id="salesLine" placeholder="ไอดีไลน์เซลส์" class="flex-1 bg-white border rounded px-1.5 py-0.5">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calculations -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-xs sm:text-sm print-grid">
-                <!-- Financial Inputs -->
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card flex flex-col justify-between">
+        <!-- Section 1: Customer & Vehicle Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+            <!-- Customer Info -->
+            <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200/80 print-card-bg">
+                <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5">
+                    👤 ข้อมูลลูกค้า <span class="text-slate-400 font-normal">(Customer Info)</span>
+                </h3>
+                <div class="space-y-2 text-xs sm:text-sm">
                     <div>
-                        <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">💰 ตัวเลขคำนวณการเงิน</h3>
-                        <div class="space-y-2 space-y-print">
-                            <div class="flex justify-between items-center gap-1">
-                                <label class="font-medium text-slate-700">ราคารถยนต์ (บาท):</label>
-                                <input type="number" id="price" value="709900" oninput="calculate()" class="w-32 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                            </div>
-                            <div class="flex justify-between items-center gap-1">
-                                <label class="font-medium text-slate-700">ส่วนลดเงินสด (บาท):</label>
-                                <input type="number" id="cashDiscount" value="30000" oninput="calculate()" class="w-32 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                            </div>
-
-                            <div id="financeInputs" class="space-y-2 space-y-print border-t pt-2">
-                                <div class="flex justify-between items-center gap-1">
-                                    <div class="flex items-center gap-1">
-                                        <label class="font-medium text-slate-700">เงินดาวน์:</label>
-                                        <select id="downType" onchange="calculate()" class="bg-white border rounded text-xs px-1 py-0.5 no-print">
-                                            <option value="บาท">บาท</option>
-                                            <option value="%">%</option>
-                                        </select>
-                                    </div>
-                                    <input type="number" id="downPayment" value="110000" oninput="calculate()" class="w-32 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                                </div>
-                                <div class="flex justify-between items-center gap-1">
-                                    <label class="font-medium text-slate-700">ผ่อนชำระ (งวด):</label>
-                                    <select id="months" onchange="onMonthChange()" class="w-32 bg-white border rounded px-1.5 py-0.5 text-right font-semibold">
-                                        <option value="36">36 งวด (3 ปี)</option>
-                                        <option value="48" selected>48 งวด (4 ปี)</option>
-                                        <option value="60">60 งวด (5 ปี)</option>
-                                        <option value="72">72 งวด (6 ปี)</option>
-                                        <option value="84">84 งวด (7 ปี)</option>
-                                    </select>
-                                </div>
-                                <div class="flex justify-between items-center gap-1">
-                                    <label class="font-medium text-slate-700">ดอกเบี้ย (% ต่อปี):</label>
-                                    <input type="number" step="0.01" id="interestRate" value="2.69" oninput="calculate()" class="w-32 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                                </div>
-                            </div>
-                        </div>
+                        <label class="block text-[11px] text-slate-500 mb-0.5">ชื่อ-นามสกุล ลูกค้า</label>
+                        <input type="text" id="custName" placeholder="ระบุชื่อลูกค้า" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
                     </div>
-
-                    <div class="mt-4 pt-3 border-t border-slate-300 space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-slate-600 font-medium">ราคาสุทธิ:</span>
-                            <span id="netPrice" class="font-bold text-slate-900">0 บาท</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">เบอร์โทรศัพท์</label>
+                            <input type="text" id="custPhone" placeholder="08X-XXX-XXXX" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
                         </div>
-                        <div id="financeSummaryRows">
-                            <div class="flex justify-between">
-                                <span class="text-slate-600 font-medium">ยอดจัดไฟแนนซ์:</span>
-                                <span id="financeAmount" class="font-bold text-slate-900">0 บาท</span>
-                            </div>
-                            <!-- Prominent Monthly Payment Box -->
-                            <div class="flex justify-between items-center text-blue-950 font-bold bg-blue-100/80 border border-blue-200 p-2.5 rounded-lg mt-2">
-                                <span class="text-base sm:text-lg">ค่างวดประมาณ:</span>
-                                <span id="monthlyPayment" class="text-xl sm:text-2xl text-blue-700 monthly-highlight">0 บาท/เดือน</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Delivery Expenses -->
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card flex flex-col justify-between">
-                    <div>
-                        <h3 class="section-title text-slate-800 font-bold border-b pb-1 mb-2">💵 ค่าใช้จ่ายวันรับรถ</h3>
-                        <div class="space-y-2 space-y-print">
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-700 font-medium">เงินดาวน์:</span>
-                                <span id="dispDown" class="font-semibold text-slate-900">0 บาท</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-700 font-medium">มัดจำป้ายแดง (ได้คืน):</span>
-                                <div class="flex items-center gap-1">
-                                    <input type="number" id="redPlate" value="4000" oninput="calculate()" class="w-24 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                                    <span>บาท</span>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-700 font-medium">หัก เงินจอง:</span>
-                                <div class="flex items-center gap-1">
-                                    <input type="number" id="bookingFee" value="1000" oninput="calculate()" class="w-24 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                                    <span>บาท</span>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-700 font-medium">หัก ส่วนลดเงินดาวน์:</span>
-                                <div class="flex items-center gap-1">
-                                    <input type="number" id="downDiscount" value="10000" oninput="calculate()" class="w-24 bg-white border rounded px-2 py-0.5 text-right font-semibold">
-                                    <span>บาท</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-3 border-t border-red-200 bg-red-50 p-2.5 rounded-lg border border-red-200">
-                        <div class="flex justify-between items-center text-red-900 font-bold">
-                            <span class="text-base">ยอดสุทธิวันรับรถ:</span>
-                            <span id="netDelivery" class="text-lg sm:text-xl text-red-700 delivery-highlight">0 บาท</span>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">LINE ID</label>
+                            <input type="text" id="custLine" placeholder="ไอดีไลน์" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Freebies -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm print-grid">
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
-                    <div class="flex justify-between items-center border-b pb-1 mb-2">
-                        <h3 class="section-title text-slate-800 font-bold m-0 border-none">🎁 รายการของแถมมาตรฐาน</h3>
-                        <button onclick="addFreebie('standard-freebies-container', '')" class="btn-add bg-emerald-600 text-white px-2 py-0.5 rounded text-xs no-print">+ เพิ่ม</button>
+            <!-- Vehicle & Sales Representative Info -->
+            <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200/80 print-card-bg">
+                <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5">
+                    🚘 รายละเอียดรถยนต์ & ผู้ขาย
+                </h3>
+                <div class="space-y-2 text-xs sm:text-sm">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">รุ่นรถยนต์</label>
+                            <input type="text" id="carModel" value="MG4 ELECTRIC" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 font-bold text-slate-800 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">สีตัวรถ</label>
+                            <input type="text" id="carColor" placeholder="เช่น ขาวนุก / ดำ" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
+                        </div>
                     </div>
-                    <div id="standard-freebies-container" class="freebie-container"></div>
-                </div>
-
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 print-card">
-                    <div class="flex justify-between items-center border-b pb-1 mb-2">
-                        <h3 class="section-title text-slate-800 font-bold m-0 border-none">🌟 รายการของแถมพิเศษ</h3>
-                        <button onclick="addFreebie('special-freebies-container', '')" class="btn-add bg-emerald-600 text-white px-2 py-0.5 rounded text-xs no-print">+ เพิ่ม</button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">ที่ปรึกษาการขาย</label>
+                            <input type="text" id="salesName" placeholder="ชื่อ" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">เบอร์ติดต่อ</label>
+                            <input type="text" id="salesPhone" placeholder="เบอร์โทร" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
+                        </div>
                     </div>
-                    <div id="special-freebies-container" class="freebie-container"></div>
                 </div>
             </div>
         </div>
+
+        <!-- Section 2: Calculation Card & Purchase Type Toggle -->
+        <div class="bg-slate-50/60 p-4 sm:p-5 rounded-2xl border border-slate-200/90 mb-5 print-card-bg">
+            
+            <!-- Purchase Type Buttons -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-200 pb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-slate-800">💳 รูปแบบการซื้อ <span class="text-slate-400 font-normal">(Purchase Type):</span></span>
+                </div>
+                <div class="flex bg-slate-200/70 p-1 rounded-xl w-full sm:w-auto">
+                    <button id="btnFinance" onclick="setPurchaseType('finance')" class="flex-1 sm:flex-initial py-1.5 px-4 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5">
+                        🏦 จัดไฟแนนซ์ (Finance)
+                    </button>
+                    <button id="btnCash" onclick="setPurchaseType('cash')" class="flex-1 sm:flex-initial py-1.5 px-4 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                        💵 ซื้อเงินสด (Cash)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3 Columns Calculation Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                
+                <!-- Col 1: Price & Discount -->
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-500 mb-3 border-b pb-1">1. ราคาและส่วนลด</h4>
+                        <div class="space-y-3 text-xs sm:text-sm">
+                            <div>
+                                <label class="block text-slate-600 mb-1">ราคารถยนต์มาตรฐาน (บาท)</label>
+                                <input type="number" id="price" value="950000" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 font-bold text-slate-800 text-right focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-600 mb-1">ส่วนลดเงินสด (บาท)</label>
+                                <input type="number" id="cashDiscount" value="30000" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 font-bold text-slate-800 text-right focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100">
+                        <span class="text-[11px] text-slate-500">สุทธิราคารถยนต์</span>
+                        <div id="netPrice" class="text-base sm:text-lg font-extrabold text-blue-900 text-right">0 ฿</div>
+                    </div>
+                </div>
+
+                <!-- Col 2: Finance Conditions -->
+                <div id="financeCol" class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-500 mb-3 border-b pb-1">2. เงื่อนไขการผ่อนชำระ</h4>
+                        <div class="space-y-2.5 text-xs sm:text-sm">
+                            <div class="flex justify-between items-center">
+                                <label class="text-slate-600">เงินดาวน์</label>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="downPercent" value="20" oninput="calculateFromPercent()" class="w-16 bg-slate-50 border border-slate-200 rounded-lg p-1.5 font-bold text-right focus:outline-none">
+                                    <span class="font-bold text-slate-600">%</span>
+                                </div>
+                            </div>
+                            <div class="text-[11px] text-right text-slate-400">
+                                คิดเป็นเงิน: <span id="downAmountText" class="font-bold text-slate-700">0 บาท</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <div>
+                                    <label class="block text-[11px] text-slate-500 mb-1">จำนวนงวด (เดือน)</label>
+                                    <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 focus:outline-none">
+                                        <option value="36">36 งวด</option>
+                                        <option value="48">48 งวด</option>
+                                        <option value="60" selected>60 งวด</option>
+                                        <option value="72">72 งวด</option>
+                                        <option value="84">84 งวด</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] text-slate-500 mb-1">อัตราดอกเบี้ย (%/ปี)</label>
+                                    <input type="number" step="0.01" id="interestRate" value="2.59" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 text-right focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="pt-1">
+                                <label class="block text-[11px] text-slate-500 mb-1">สถาบันการเงิน / ไฟแนนซ์</label>
+                                <input type="text" id="financeBank" placeholder="เช่น กรุงศรีออโต้ / ธนชาต" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1.5 text-xs focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 3: Delivery Expenses -->
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-500 mb-3 border-b pb-1">3. ค่าใช้จ่ายวันรับรถ</h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">เงินดาวน์สุทธิ:</span>
+                                <span id="dispDown" class="font-bold text-slate-900">0 ฿</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">มัดจำป้ายแดง:</span>
+                                <input type="number" id="redPlate" value="3000" oninput="calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-semibold">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">หัก เงินมัดจำจอง:</span>
+                                <input type="number" id="bookingFee" value="5000" oninput="calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-semibold text-red-600">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600">หัก ส่วนลดเงินดาวน์:</span>
+                                <input type="number" id="downDiscount" value="10000" oninput="calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-semibold text-red-600">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100">
+                        <div class="flex justify-between items-end">
+                            <span class="text-xs font-bold text-emerald-800">รวมจ่ายวันรับรถ:</span>
+                            <span id="netDelivery" class="text-base sm:text-lg font-extrabold text-emerald-600">0 ฿</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Dark Navy Highlight Banner for Finance Summary -->
+            <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-3 shadow-md print-banner-bg">
+                <div class="text-xs space-y-1 text-slate-300 w-full sm:w-auto">
+                    <div>ยอดจัดไฟแนนซ์: <span id="financeAmount" class="font-bold text-white text-sm">0 บาท</span></div>
+                    <div>ดอกเบี้ยรวมทั้งหมด: <span id="totalInterest" class="font-bold text-white text-sm">0 บาท</span></div>
+                </div>
+                <div class="text-right w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-700">
+                    <div class="text-[11px] text-slate-300">ผ่อนประมาณเดือนละ:</div>
+                    <div id="monthlyPayment" class="text-2xl sm:text-3xl font-extrabold text-amber-400 monthly-highlight">0 บาท/เดือน</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section 3: Freebies & Accessories -->
+        <div class="mb-5">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
+                <span>🎁 รายการของแถม & อุปกรณ์ตกแต่ง <span class="text-slate-400 font-normal">(Freebies & Accessories)</span></span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Standard Freebies -->
+                <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200 print-card-bg">
+                    <div class="flex justify-between items-center mb-2.5 border-b pb-1.5">
+                        <span class="text-xs font-bold text-slate-700">รายการของแถมมาตรฐาน</span>
+                        <button onclick="addFreebie('standard-container', '')" class="btn-add text-[11px] text-blue-600 font-bold hover:underline no-print">+ เพิ่มรายการ</button>
+                    </div>
+                    <div id="standard-container" class="space-y-1.5"></div>
+                </div>
+
+                <!-- Special Freebies -->
+                <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200 print-card-bg">
+                    <div class="flex justify-between items-center mb-2.5 border-b pb-1.5">
+                        <span class="text-xs font-bold text-slate-700">รายการพิเศษเพิ่มเติม</span>
+                        <button onclick="addFreebie('special-container', '')" class="btn-add text-[11px] text-blue-600 font-bold hover:underline no-print">+ เพิ่มรายการ</button>
+                    </div>
+                    <div id="special-container" class="space-y-1.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Campaign Terms (Moved to Bottom) -->
+        <div class="bg-amber-50/60 border border-amber-200/80 rounded-xl p-3.5 text-xs sm:text-sm">
+            <label class="block font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                📢 เงื่อนไขแคมเปญ / โปรโมชันพิเศษ ✏️
+            </label>
+            <textarea id="campaignTerm" rows="2" class="w-full bg-white/80 border border-amber-200 rounded-lg p-2 text-slate-700 text-xs focus:outline-none focus:bg-white resize-none" placeholder="ระบุรายละเอียดโปรโมชัน เช่น ฟรีประกันภัยชั้น 1, ดอกเบี้ยพิเศษเฉพาะเดือนนี้..."></textarea>
+        </div>
+
     </div>
 
     <script>
+        // Set Default Date
         document.getElementById('docDate').valueAsDate = new Date();
+        document.getElementById('campaignTerm').value = "เงื่อนไขแคมเปญ จอง และรับรถ ภายในวันที่ 30 กันยายน 2569\n*ขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบล่วงหน้า";
 
         const initialStandard = [
-            "ประกันภัยชั้น 1 ซ่อมศูนย์ 1 ปี",
-            "พ.ร.บ. 1 ปี",
-            "โฮมชาร์จเจอร์ พร้อมติดตั้งฟรี",
-            "รับประกันตัวรถ 4 ปี / 120,000 กม.",
-            "รับประกันแบตเตอรี่ตลอดอายุการใช้งาน",
-            "บริการช่วยเหลือฉุกเฉิน 24 ชม. 1 ปี",
-            "สายชาร์จฉุกเฉิน",
-            "ฟรีค่าแรงเช็คระยะ 5 ครั้ง",
-            "พรมปูพื้น MG"
+            "ประกันภัยชั้น 1 พร้อม พ.ร.บ.",
+            "ฟิล์มกรองแสงรอบคัน + บานหน้า",
+            "พรมปูพื้นเข้ารูปสั่งตัดพิเศษ",
+            "กรอบป้ายทะเบียน",
+            "บริการช่วยเหลือฉุกเฉิน 24ชม. (1 ปี)"
         ];
 
         const initialSpecial = [
-            "ฟิล์มเซรามิกรอบคัน",
-            "PDI ล้างขัดเคลือบสี",
-            "กรอบป้ายทะเบียน",
-            "พรมไวนิล เข้ารูปตรงรุ่น",
-            "ช่อดอกไม้วันรับรถ",
-            "อบโอโซนฆ่าเชื้อ",
-            "คูปองล้างแอร์ 2 ครั้ง",
-            "ฟรีค่าจดทะเบียน",
-            "ถาดวางของท้ายรถ",
-            "กล้องบันทึกหน้า MG",
-            "ชุดกันสาดข้าง"
+            "ฟรี เคลือบแก้วเซรามิคแท้ 1 ครั้ง",
+            "กล้องบันทึกภาพหน้า-หลัง HD",
+            "ชุดแต่งรอบคัน สเกิร์ต + สปอยเลอร์"
         ];
 
         function addFreebie(containerId, textValue) {
             const container = document.getElementById(containerId);
             const div = document.createElement('div');
-            div.className = 'flex items-center gap-1 freebie-item';
+            div.className = 'flex items-center gap-1.5 freebie-item';
             div.innerHTML = `
-                <span class="text-slate-400">•</span>
-                <input type="text" value="${textValue}" placeholder="ระบุของแถม..." class="flex-1 bg-white border border-slate-200 rounded px-1.5 py-0.5 text-xs focus:outline-none">
-                <button onclick="this.parentElement.remove()" class="btn-del text-red-500 font-bold px-1 no-print">✕</button>
+                <span class="text-blue-500 font-bold text-xs">✓</span>
+                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs focus:outline-none">
+                <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-1 text-xs no-print">🗑️</button>
             `;
             container.appendChild(div);
         }
 
         function initFreebies() {
-            initialStandard.forEach(item => addFreebie('standard-freebies-container', item));
-            initialSpecial.forEach(item => addFreebie('special-freebies-container', item));
+            initialStandard.forEach(item => addFreebie('standard-container', item));
+            initialSpecial.forEach(item => addFreebie('special-container', item));
         }
 
-        const defaultRates = { 36: 2.69, 48: 2.69, 60: 2.89, 72: 3.29, 84: 3.59 };
+        let currentPurchaseType = 'finance';
+
+        function setPurchaseType(type) {
+            currentPurchaseType = type;
+            const btnFinance = document.getElementById('btnFinance');
+            const btnCash = document.getElementById('btnCash');
+            const financeCol = document.getElementById('financeCol');
+            const financeSummaryBanner = document.getElementById('financeSummaryBanner');
+
+            if (type === 'cash') {
+                btnCash.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+                btnFinance.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5";
+                
+                financeCol.style.opacity = '0.4';
+                financeCol.style.pointerEvents = 'none';
+                financeSummaryBanner.style.display = 'none';
+            } else {
+                btnFinance.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+                btnCash.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5";
+                
+                financeCol.style.opacity = '1';
+                financeCol.style.pointerEvents = 'auto';
+                financeSummaryBanner.style.display = 'flex';
+            }
+            calculate();
+        }
+
+        const defaultRates = { 36: 2.59, 48: 2.59, 60: 2.59, 72: 2.89, 84: 3.19 };
 
         function onMonthChange() {
             const m = document.getElementById('months').value;
@@ -387,26 +379,12 @@
             calculate();
         }
 
-        function togglePurchaseType() {
-            const type = document.getElementById('purchaseType').value;
-            const financeRows = document.getElementById('financeSummaryRows');
-            const financeInputs = document.getElementById('financeInputs');
-            const financeBankRow = document.getElementById('financeRow');
-
-            if (type === 'cash') {
-                financeRows.style.display = 'none';
-                financeInputs.style.display = 'none';
-                financeBankRow.style.display = 'none';
-            } else {
-                financeRows.style.display = 'block';
-                financeInputs.style.display = 'block';
-                financeBankRow.style.display = 'flex';
-            }
-            calculate();
-        }
-
         function formatNum(num) {
             return new Intl.NumberFormat('th-TH').format(Math.round(num));
+        }
+
+        function calculateFromPercent() {
+            calculate();
         }
 
         function calculate() {
@@ -414,29 +392,25 @@
             const cashDiscount = parseFloat(document.getElementById('cashDiscount').value) || 0;
             const netPrice = price - cashDiscount;
 
-            const purchaseType = document.getElementById('purchaseType').value;
             const redPlate = parseFloat(document.getElementById('redPlate').value) || 0;
             const bookingFee = parseFloat(document.getElementById('bookingFee').value) || 0;
             const downDiscount = parseFloat(document.getElementById('downDiscount').value) || 0;
 
-            document.getElementById('netPrice').innerText = formatNum(netPrice) + " บาท";
+            document.getElementById('netPrice').innerText = formatNum(netPrice) + " ฿";
 
-            if (purchaseType === 'cash') {
+            if (currentPurchaseType === 'cash') {
                 const netDeliveryCash = netPrice + redPlate - bookingFee - downDiscount;
-                document.getElementById('dispDown').innerText = "0 บาท";
-                document.getElementById('netDelivery').innerText = formatNum(netDeliveryCash) + " บาท";
+                document.getElementById('dispDown').innerText = "0 ฿";
+                document.getElementById('netDelivery').innerText = formatNum(netDeliveryCash) + " ฿";
                 return;
             }
 
-            const downType = document.getElementById('downType').value;
-            let downVal = parseFloat(document.getElementById('downPayment').value) || 0;
-            let downAmount = downVal;
+            const downPercent = parseFloat(document.getElementById('downPercent').value) || 0;
+            const downAmount = netPrice * (downPercent / 100);
 
-            if (downType === '%') {
-                downAmount = netPrice * (downVal / 100);
-            }
+            document.getElementById('downAmountText').innerText = formatNum(downAmount) + " บาท";
 
-            const months = parseInt(document.getElementById('months').value) || 12;
+            const months = parseInt(document.getElementById('months').value) || 60;
             const ratePercent = parseFloat(document.getElementById('interestRate').value) || 0;
             const rate = ratePercent / 100;
 
@@ -447,9 +421,11 @@
             const netDelivery = downAmount + redPlate - bookingFee - downDiscount;
 
             document.getElementById('financeAmount').innerText = formatNum(financeAmount) + " บาท";
+            document.getElementById('totalInterest').innerText = formatNum(totalInterest) + " บาท";
             document.getElementById('monthlyPayment').innerText = formatNum(monthlyPayment) + " บาท/เดือน";
-            document.getElementById('dispDown').innerText = formatNum(downAmount) + " บาท";
-            document.getElementById('netDelivery').innerText = formatNum(netDelivery) + " บาท";
+            
+            document.getElementById('dispDown').innerText = formatNum(downAmount) + " ฿";
+            document.getElementById('netDelivery').innerText = formatNum(netDelivery) + " ฿";
         }
 
         function copyToChat() {
@@ -457,7 +433,7 @@
             const custName = document.getElementById('custName').value || '-';
             const carModel = document.getElementById('carModel').value || '-';
             const carColor = document.getElementById('carColor').value || '-';
-            const purchaseType = document.getElementById('purchaseType').value === 'cash' ? 'ซื้อสด' : 'จัดไฟแนนซ์';
+            const purchaseType = currentPurchaseType === 'cash' ? 'ซื้อเงินสด' : 'จัดไฟแนนซ์';
             
             const netPrice = document.getElementById('netPrice').innerText;
             const monthlyPayment = document.getElementById('monthlyPayment').innerText;
@@ -467,17 +443,17 @@
             const salesPhone = document.getElementById('salesPhone').value || '-';
 
             let text = `🚗 **ใบเสนอราคาสำหรับคุณ ${custName}**\n`;
-            text += `📌 ${campaign}\n\n`;
             text += `🚘 รุ่นรถ: ${carModel} (${carColor})\n`;
             text += `💳 รูปแบบการซื้อ: ${purchaseType}\n`;
             text += `💰 ราคาสุทธิ: ${netPrice}\n`;
 
-            if (document.getElementById('purchaseType').value === 'finance') {
+            if (currentPurchaseType === 'finance') {
                 const months = document.getElementById('months').value;
                 text += `📊 ผ่อนชำระ: ${monthlyPayment} (${months} งวด)\n`;
             }
 
-            text += `💵 ยอดสุทธิวันรับรถ: ${netDelivery}\n\n`;
+            text += `💵 ยอดรวมจ่ายวันรับรถ: ${netDelivery}\n\n`;
+            text += `📌 **โปรโมชันแคมเปญ:**\n${campaign}\n\n`;
             text += `👨‍💼 ที่ปรึกษาการขาย: ${salesName} (โทร: ${salesPhone})\n`;
 
             navigator.clipboard.writeText(text).then(() => {
