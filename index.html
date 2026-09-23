@@ -57,6 +57,18 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            .freebie-header-std {
+                background-color: #ecfdf5 !important;
+                border-color: #a7f3d0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .freebie-header-spc {
+                background-color: #fffbeb !important;
+                border-color: #fde68a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
 </head>
@@ -183,7 +195,7 @@
                     </div>
                 </div>
 
-                <!-- Col 2: Finance Conditions (ปรับปรุงใหม่: กรอกเงินดาวน์ได้ทั้ง % และ บาท) -->
+                <!-- Col 2: Finance Conditions -->
                 <div id="financeCol" class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
                         <h4 class="text-xs font-bold text-slate-500 mb-3 border-b pb-1">2. เงื่อนไขการผ่อนชำระ</h4>
@@ -272,29 +284,36 @@
 
         </div>
 
-        <!-- Section 3: Freebies & Accessories -->
+        <!-- Section 3: Freebies & Accessories (ปรับปรุงตัวหนังสือเด่นชัด) -->
         <div class="mb-5">
-            <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
-                <span>🎁 รายการของแถม & อุปกรณ์ตกแต่ง <span class="text-slate-400 font-normal">(Freebies & Accessories)</span></span>
-            </h3>
+            <div class="flex items-center gap-2 mb-3">
+                <span class="text-lg">🎁</span>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-wide">
+                    รายการของแถม & อุปกรณ์ตกแต่ง <span class="text-slate-400 font-normal text-xs sm:text-sm">(Freebies & Accessories)</span>
+                </h3>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Standard Freebies -->
-                <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200 print-card-bg">
-                    <div class="flex justify-between items-center mb-2.5 border-b pb-1.5">
-                        <span class="text-xs font-bold text-slate-700">รายการของแถมมาตรฐาน</span>
-                        <button onclick="addFreebie('standard-container', '')" class="btn-add text-[11px] text-blue-600 font-bold hover:underline no-print">+ เพิ่มรายการ</button>
+                <!-- Standard Freebies Container -->
+                <div class="bg-slate-50/90 rounded-xl border border-slate-200 overflow-hidden shadow-sm print-card-bg">
+                    <div class="bg-emerald-50 border-b border-emerald-200 px-3.5 py-2 flex justify-between items-center freebie-header-std">
+                        <span class="text-xs sm:text-sm font-bold text-emerald-900 flex items-center gap-1.5">
+                            <span class="text-emerald-600">📦</span> รายการของแถมมาตรฐาน
+                        </span>
+                        <button onclick="addFreebie('standard-container', '')" class="btn-add bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm transition no-print">+ เพิ่มรายการ</button>
                     </div>
-                    <div id="standard-container" class="space-y-1.5"></div>
+                    <div id="standard-container" class="p-3 space-y-2"></div>
                 </div>
 
-                <!-- Special Freebies -->
-                <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200 print-card-bg">
-                    <div class="flex justify-between items-center mb-2.5 border-b pb-1.5">
-                        <span class="text-xs font-bold text-slate-700">รายการพิเศษเพิ่มเติม</span>
-                        <button onclick="addFreebie('special-container', '')" class="btn-add text-[11px] text-blue-600 font-bold hover:underline no-print">+ เพิ่มรายการ</button>
+                <!-- Special Freebies Container -->
+                <div class="bg-slate-50/90 rounded-xl border border-slate-200 overflow-hidden shadow-sm print-card-bg">
+                    <div class="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex justify-between items-center freebie-header-spc">
+                        <span class="text-xs sm:text-sm font-bold text-amber-900 flex items-center gap-1.5">
+                            <span class="text-amber-500">✨</span> รายการพิเศษเพิ่มเติม
+                        </span>
+                        <button onclick="addFreebie('special-container', '')" class="btn-add bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm transition no-print">+ เพิ่มรายการ</button>
                     </div>
-                    <div id="special-container" class="space-y-1.5"></div>
+                    <div id="special-container" class="p-3 space-y-2"></div>
                 </div>
             </div>
         </div>
@@ -331,10 +350,10 @@
         function addFreebie(containerId, textValue) {
             const container = document.getElementById(containerId);
             const div = document.createElement('div');
-            div.className = 'flex items-center gap-1.5 freebie-item';
+            div.className = 'flex items-center gap-2 freebie-item';
             div.innerHTML = `
-                <span class="text-blue-500 font-bold text-xs">✓</span>
-                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs focus:outline-none">
+                <span class="text-blue-600 font-extrabold text-sm">✓</span>
+                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="flex-1 bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-none">
                 <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-1 text-xs no-print">🗑️</button>
             `;
             container.appendChild(div);
@@ -386,7 +405,6 @@
             return new Intl.NumberFormat('th-TH').format(Math.round(num));
         }
 
-        // คำนวณจำนวนเงิน (บาท) เมื่อแก้ไข เปอร์เซ็นต์ (%)
         function calculateFromPercent() {
             const price = parseFloat(document.getElementById('price').value) || 0;
             const cashDiscount = parseFloat(document.getElementById('cashDiscount').value) || 0;
@@ -399,7 +417,6 @@
             calculate();
         }
 
-        // คำนวณเปอร์เซ็นต์ (%) เมื่อแก้ไข จำนวนเงิน (บาท)
         function calculateFromAmount() {
             const price = parseFloat(document.getElementById('price').value) || 0;
             const cashDiscount = parseFloat(document.getElementById('cashDiscount').value) || 0;
@@ -416,7 +433,6 @@
             calculate();
         }
 
-        // คำนวณภาพรวมยอดผ่อน ยอดจัด และวันรับรถ
         function calculate() {
             const price = parseFloat(document.getElementById('price').value) || 0;
             const cashDiscount = parseFloat(document.getElementById('cashDiscount').value) || 0;
