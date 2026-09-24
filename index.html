@@ -245,7 +245,7 @@
             <div class="flex items-center gap-2 mb-3">
                 <span class="text-lg">🎁</span>
                 <h3 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-wide">
-                    รายการของแถม & อุปกรณ์ตกแต่ง <span class="text-slate-400 font-normal text-xs sm:text-sm">(Freebies & Accessories)</span>
+                    รายการของแถม & อุปกรณ์ตกแต่งสุดคุ้ม <span class="text-slate-400 font-normal text-xs sm:text-sm">(Freebies & Accessories)</span>
                 </h3>
             </div>
             
@@ -265,7 +265,7 @@
                 <div class="bg-slate-50/90 rounded-xl border border-slate-200 overflow-hidden shadow-sm print-card-bg">
                     <div class="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex justify-between items-center freebie-header-spc">
                         <span class="text-xs sm:text-sm font-bold text-amber-900 flex items-center gap-1.5">
-                            <span class="text-amber-500">✨</span> รายการพิเศษเพิ่มเติม
+                            <span class="text-amber-500">✨</span> รายการพิเศษ & บริการหลังการขาย
                         </span>
                         <button onclick="addFreebie('special-container', '')" class="btn-add bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm transition no-print">+ เพิ่มรายการ</button>
                     </div>
@@ -289,18 +289,32 @@
         document.getElementById('docDate').valueAsDate = new Date();
         document.getElementById('campaignTerm').value = "เงื่อนไขแคมเปญ จอง และรับรถ ภายในวันที่ 30 กันยายน 2569\n*ขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบล่วงหน้า";
 
+        // รายการของแถมมาตรฐานใหม่
         const initialStandard = [
-            "ประกันภัยชั้น 1 พร้อม พ.ร.บ.",
-            "ฟิล์มกรองแสงรอบคัน + บานหน้า",
-            "พรมปูพื้นเข้ารูปสั่งตัดพิเศษ",
-            "กรอบป้ายทะเบียน",
-            "บริการช่วยเหลือฉุกเฉิน 24ชม. (1 ปี)"
+            "ประกันภัยชั้น 1 (คุ้มครอง 1 ปี)",
+            "พ.ร.บ. คุ้มครอง 1 ปี",
+            "กรอบป้ายทะเบียน MG (2 ชิ้น/ชุด)",
+            "พรมปูพื้น MG แท้",
+            "ขัดเคลือบสีเงาวับก่อนส่งมอบ",
+            "กระเป๋าใส่เอกสาร MG",
+            "รับประกันยาง 2 ปี หรือ 50,000 กม.",
+            "รับประกันตัวรถ 4 ปี หรือ 120,000 กม.",
+            "รับประกันแบตเตอรี่ / มอเตอร์ / ชุดควบคุม ตลอดชีพ (Lifetime)",
+            "เครื่อง Home Charger + ฟรีค่าติดตั้ง",
+            "ชุดชาร์จฉุกเฉิน Emergency Charger"
         ];
 
+        // รายการพิเศษเพิ่มเติมใหม่
         const initialSpecial = [
-            "ฟรี เคลือบแก้วเซรามิคแท้ 1 ครั้ง",
-            "กล้องบันทึกภาพหน้า-หลัง HD",
-            "ชุดแต่งรอบคัน สเกิร์ต + สปอยเลอร์"
+            "ฟรีค่าแรงเช็กระยะ 5 ครั้ง หรือ 50,000 กม.",
+            "กระเป๋าเล่มคู่มือประจำรถ",
+            "ฟรีตรวจ PDI รอบคันอย่างละเอียด 3 ขั้นตอน",
+            "บริการช่วยเหลือฉุกเฉิน & รถลาก 24 ชั่วโมง",
+            "Call Center บริการทุกวัน 24 ชั่วโมง",
+            "Courtesy Car (รถใช้ระหว่างซ่อมกรณีเข้าศูนย์เกิน 4 วัน)",
+            "Mobile Service ตรวจเช็คนอกสถานที่",
+            "ให้คำปรึกษาหลังการขาย + บริการรถยกเคลม",
+            "สิทธิประโยชน์ ฟรีภาษี / ฟรี VAT 7% / ฟรี VAT 3%"
         ];
 
         function addFreebie(containerId, textValue) {
