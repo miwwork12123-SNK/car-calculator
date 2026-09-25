@@ -615,7 +615,7 @@
             });
         }
 
-        /* ฟังก์ชันบันทึกภาพ (ปรับแก้เรื่องตัวอักษรไม่ตรงบรรทัด และรองรับการบันทึกภาพบน iOS / Safari / LINE) */
+        /* ฟังก์ชันบันทึกภาพ (บังคับสัดส่วน A4 / รองรับ iOS และมือถือทุกรุ่น) */
 function saveAsJPG(btnElement) {
     const srcCard = document.getElementById('quotation-card');
     const originalBtnText = btnElement.innerHTML;
@@ -629,7 +629,30 @@ function saveAsJPG(btnElement) {
     const ignoreElements = clone.querySelectorAll('[data-html2canvas-ignore="true"], .btn-del, .btn-add, .no-print');
     ignoreElements.forEach(el => el.remove());
 
-    // 3. แปลง input/select/textarea เดิมให้เป็น span ข้อความธรรมดาที่ล็อกจัดตำแหน่งบรรทัด
+    // 3. บังคับขนาดของ Clone ให้เป็นสัดส่วน A4 แนวยาวมาตรฐาน (ความกว้าง 794px)
+    // เพื่อไม่ให้ Responsive ยุบคอลัมน์ลงมาเป็นแถวยาวบนมือถือ
+    clone.style.width = '794px';
+    clone.style.minWidth = '794px';
+    clone.style.maxWidth = '794px';
+    clone.style.padding = '30px';
+    clone.style.boxSizing = 'border-box';
+
+    // บังคับ Layout Grid ด้านในให้แสดงผลเป็น 3 คอลัมน์ และ 2 คอลัมน์ ตามลำดับ
+    const gridCols3 = clone.querySelectorAll('.grid-cols-1.md\\:grid-cols-3');
+    gridCols3.forEach(el => {
+        el.style.display = 'grid';
+        el.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+        el.style.gap = '12px';
+    });
+
+    const gridCols2 = clone.querySelectorAll('.grid-cols-1.md\\:grid-cols-2');
+    gridCols2.forEach(el => {
+        el.style.display = 'grid';
+        el.style.gridTemplateColumns = 'repeat(2, minmax(0, 1fr))';
+        el.style.gap = '12px';
+    });
+
+    // 4. แปลง input/select/textarea เดิมให้เป็น span ข้อความธรรมดาที่ล็อกจัดตำแหน่ง
     const srcInputs = srcCard.querySelectorAll('input, select, textarea');
     const cloneInputs = clone.querySelectorAll('input, select, textarea');
 
@@ -661,7 +684,6 @@ function saveAsJPG(btnElement) {
         
         const comp = window.getComputedStyle(srcInput);
         
-        // ล็อกคุณสมบัติเพื่อให้ข้อความจัดตรงกลางบรรทัดพอดี
         fontSpan.style.fontFamily = "'Prompt', sans-serif";
         fontSpan.style.fontSize = comp.fontSize;
         fontSpan.style.fontWeight = "700";
@@ -669,10 +691,8 @@ function saveAsJPG(btnElement) {
         fontSpan.style.display = 'inline-flex';
         fontSpan.style.alignItems = 'center';
         fontSpan.style.justifyContent = srcInput.classList.contains('text-right') ? 'flex-end' : 'flex-start';
-        fontSpan.style.width = comp.width;
+        fontSpan.style.width = '100%';
         fontSpan.style.height = comp.height;
-        fontSpan.style.padding = comp.padding;
-        fontSpan.style.margin = '0';
         fontSpan.style.lineHeight = '1';
         fontSpan.style.verticalAlign = 'middle';
         fontSpan.style.boxSizing = 'border-box';
@@ -681,30 +701,31 @@ function saveAsJPG(btnElement) {
         cloneInput.parentNode.replaceChild(fontSpan, cloneInput);
     });
 
-    // 4. นำ Clone ไปวางซ่อนไว้นอกหน้าจอ
+    // 5. นำ Clone ไปวางซ่อนไว้นอกหน้าจอ
     const wrapper = document.createElement('div');
     wrapper.style.position = 'absolute';
     wrapper.style.left = '-9999px';
     wrapper.style.top = '0';
-    wrapper.style.width = srcCard.offsetWidth + 'px';
+    wrapper.style.width = '794px';
     wrapper.appendChild(clone);
     document.body.appendChild(wrapper);
 
-    // 5. ตรวจสอบอุปกรณ์ว่าเป็น iOS หรือไม่
+    // 6. ตรวจสอบว่าเป็น iOS หรือไม่
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    // 6. เรนเดอร์เป็นภาพ
+    // 7. เรนเดอร์เป็นภาพ A4
     setTimeout(() => {
         html2canvas(clone, {
-            scale: 2.5,
+            scale: 2, // สเกลคมชัดพอดี A4
             useCORS: true,
             backgroundColor: "#ffffff",
-            logging: false
+            logging: false,
+            width: 794
         }).then(canvas => {
             const imageJPG = canvas.toDataURL("image/jpeg", 0.95);
 
             if (isIOS) {
-                // สำหรับ iOS / iPhone: เปิดภาพในแท็บใหม่เพื่อให้แตะค้างแล้วกด "บันทึกไปยังแอปรูปภาพ" ได้ทันที
+                // สำหรับ iOS ให้เปิดหน้าแสดงรูปให้กดแตะค้างบันทึก
                 const newWindow = window.open("");
                 if (newWindow) {
                     newWindow.document.write(`
@@ -725,11 +746,10 @@ function saveAsJPG(btnElement) {
                         </html>
                     `);
                 } else {
-                    // หากโดนบล็อก Pop-up ให้แสดงรูปในหน้าปัจจุบันแทน
                     window.location.href = imageJPG;
                 }
             } else {
-                // สำหรับ Android / PC: ดาวน์โหลดไฟล์ตามปกติ
+                // สำหรับ Android / PC ดาวน์โหลดไฟล์ทันที
                 const link = document.createElement('a');
                 link.download = `ใบเสนอราคา_${new Date().toISOString().slice(0,10)}.jpg`;
                 link.href = imageJPG;
