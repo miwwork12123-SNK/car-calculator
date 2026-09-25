@@ -225,7 +225,7 @@
                                         <span class="font-bold text-slate-600 text-[8px]">%</span>
                                     </div>
                                     <div class="flex items-center gap-0.5 w-2/3">
-                                        <input type="text" id="downAmount" value="184,000" oninput="formatInput(this); calculateFromAmount()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-right focus:outline-none">
+                                        <input type="text" id="downAmount" value="137,475" oninput="formatInput(this); calculateFromAmount()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-right focus:outline-none">
                                         <span class="font-bold text-slate-600 text-[8px]">บาท</span>
                                     </div>
                                 </div>
@@ -235,8 +235,8 @@
                                     <label class="block text-slate-500 text-[7.5px]">จำนวนงวด</label>
                                     <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 focus:outline-none text-[8px]">
                                         <option value="36">36 งวด</option>
-                                        <option value="48">48 งวด</option>
-                                        <option value="60" selected>48 งวด</option>
+                                        <option value="48" selected>48 งวด</option>
+                                        <option value="60">60 งวด</option>
                                         <option value="72">72 งวด</option>
                                         <option value="84">84 งวด</option>
                                     </select>
@@ -276,7 +276,7 @@
                             </div>
                             <div class="calc-row">
                                 <span class="text-slate-600">อื่นๆ:</span>
-                                <input type="text" id="registrationFee" value="0" oninput="formatInput(this); calculate()" class="w-12 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold">
+                                <input type="text" id="otherFee" value="0" oninput="formatInput(this); calculate()" class="w-12 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold">
                             </div>
                             
                             <div id="firstInstallmentRow" class="calc-row text-blue-800 font-bold bg-blue-50/80 px-1 py-0.5 rounded text-[8px]" style="display: none;">
@@ -517,6 +517,7 @@
 
             const redPlate = parseNum(document.getElementById('redPlate').value);
             const registrationFee = parseNum(document.getElementById('registrationFee').value);
+            const otherFee = parseNum(document.getElementById('otherFee').value);
             const bookingFee = parseNum(document.getElementById('bookingFee').value);
             const downDiscount = parseNum(document.getElementById('downDiscount').value);
 
@@ -530,7 +531,7 @@
             const bgNote = document.getElementById('bgNote');
 
             if (currentPurchaseType === 'cash') {
-                const netDeliveryCash = netPrice + redPlate + registrationFee - bookingFee - downDiscount;
+                const netDeliveryCash = netPrice + redPlate + registrationFee + otherFee - bookingFee - downDiscount;
                 document.getElementById('dispDown').innerText = "0 ฿";
                 document.getElementById('netDelivery').innerText = formatNum(netDeliveryCash) + " ฿";
                 firstRow.style.display = 'none';
@@ -540,7 +541,7 @@
 
             const downAmount = parseNum(document.getElementById('downAmount').value);
 
-            const months = parseInt(document.getElementById('months').value) || 60;
+            const months = parseInt(document.getElementById('months').value) || 48;
             const ratePercent = parseFloat(document.getElementById('interestRate').value) || 0;
             const rate = ratePercent / 100;
 
@@ -549,13 +550,13 @@
             const monthlyPayment = (financeAmount + totalInterest) / months;
 
             const isBeginning = document.getElementById('chkBeginning').checked;
-            let netDelivery = downAmount + redPlate + registrationFee - bookingFee - downDiscount;
+            let netDelivery = downAmount + redPlate + registrationFee + otherFee - bookingFee - downDiscount;
 
             if (isBeginning) {
                 netDelivery += monthlyPayment;
                 document.getElementById('dispFirstInstallment').innerText = formatNum(monthlyPayment) + " ฿";
                 firstRow.style.display = 'flex';
-                bgNote.style.display = 'none';
+                bgNote.style.display = 'inline';
             } else {
                 firstRow.style.display = 'none';
                 bgNote.style.display = 'none';
@@ -570,69 +571,39 @@
         }
 
         function copyToChat() {
-            const campaign = document.getElementById('campaignTerm').value;
             const purchaseType = currentPurchaseType === 'cash' ? 'ซื้อเงินสด' : 'จัดไฟแนนซ์';
-            
+            const price = document.getElementById('price').value;
             const netPrice = document.getElementById('netPrice').innerText;
-            const monthlyPayment = document.getElementById('monthlyPayment').innerText;
-            const netDelivery = document.getElementById('netDelivery').innerText;
-
-            const cashDiscount = document.getElementById('cashDiscount').value || '0';
-            const downDiscount = document.getElementById('downDiscount').value || '0';
             const totalAllDiscount = document.getElementById('totalAllDiscount').innerText;
+            const netDelivery = document.getElementById('netDelivery').innerText;
+            const campaign = document.getElementById('campaignTerm').value;
 
-            const redPlate = document.getElementById('redPlate').value || '0';
-            const registrationFee = document.getElementById('registrationFee').value || '0';
-            const bookingFee = document.getElementById('bookingFee').value || '0';
-
-            let text = `🚗 **ใบเสนอราคาตารางค่างวดรถยนต์**\n`;
-            text += `💳 รูปแบบการซื้อ: ${purchaseType}\n`;
-            text += `💰 ราคาสุทธิ: ${netPrice}\n`;
-            text += `💥 **ส่วนลดรวมทั้งหมด: ${totalAllDiscount}** (ส่วนลดต้น ${cashDiscount} + ส่วนลดดาวน์ ${downDiscount})\n`;
+            let text = `📄 **ใบเสนอราคาและตารางค่างวดรถยนต์**\n`;
+            text += `รูปแบบการซื้อ: ${purchaseType}\n`;
+            text += `ราคารถยนต์: ${price} บาท\n`;
+            text += `สุทธิราคารถยนต์: ${netPrice}\n`;
+            text += `💥 รวมส่วนลดทั้งหมด: ${totalAllDiscount}\n`;
 
             if (currentPurchaseType === 'finance') {
-                const months = document.getElementById('months').value;
                 const downPercent = document.getElementById('downPercent').value;
                 const downAmount = document.getElementById('downAmount').value;
-                const interestRate = document.getElementById('interestRate').value;
-                const financeAmount = document.getElementById('financeAmount').innerText;
-
-                text += `📌 เงินดาวน์: ${downPercent}% (${downAmount} บาท)\n`;
-                text += `🏦 ยอดจัด: ${financeAmount}\n`;
-                text += `📅 ผ่อนชำระ: ${months} งวด (ดอกเบี้ย ${interestRate}%)\n`;
-                text += `ค่างวดประมาณ: ${monthlyPayment}\n`;
+                const months = document.getElementById('months').value;
+                const monthlyPayment = document.getElementById('monthlyPayment').innerText;
+                text += `เงินดาวน์: ${downPercent}% (${downAmount} บาท)\n`;
+                text += `ผ่อนชำระ: ${months} งวด (${monthlyPayment})\n`;
             }
 
-            text += `\n💵 **ค่าใช้จ่ายวันรับรถ**\n`;
-            text += `• มัดจำป้ายแดง: ${redPlate} บาท\n`;
-            text += `• ค่าจดทะเบียน: ${registrationFee} บาท\n`;
-            text += `• หัก มัดจำจอง: -${bookingFee} บาท\n`;
-            text += `• หัก ส่วนลดเงินดาวน์: -${downDiscount} บาท\n`;
-            text += `🔥 **รวมจ่ายวันรับรถสุทธิ: ${netDelivery}**\n\n`;
-
-            text += `🎁 **รายการของแถมมาตรฐาน**\n`;
-            const stdInputs = document.querySelectorAll('#standard-container input');
-            stdInputs.forEach(input => {
-                if(input.value.trim()) text += `• ${input.value.trim()}\n`;
-            });
-
-            text += `\n✨ **รายการพิเศษ & บริการหลังการขาย**\n`;
-            const spcInputs = document.querySelectorAll('#special-container input');
-            spcInputs.forEach(input => {
-                if(input.value.trim()) text += `• ${input.value.trim()}\n`;
-            });
-
-            if (campaign) {
-                text += `\n📢 **เงื่อนไขโปรโมชัน:**\n${campaign}`;
-            }
+            text += `💵 รวมจ่ายวันรับรถ: ${netDelivery}\n\n`;
+            text += `📢 **เงื่อนไข:**\n${campaign}`;
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('คัดลอกรายละเอียดลง Clipboard เรียบร้อยแล้ว!');
+                alert('คัดลอกข้อมูลเรียบร้อยแล้ว!');
             }).catch(err => {
-                alert('ไม่สามารถคัดลอกได้: ' + err);
+                console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
             });
         }
 
+        // Initialize freebies and calculation on load
         window.onload = function() {
             initFreebies();
             calculateFromPercent();
