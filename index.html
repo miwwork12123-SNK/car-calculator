@@ -23,7 +23,7 @@
                 margin: 0 !important;
             }
             html, body {
-                width: 210mm !important;
+               width: 210mm !important;
                 height: 297mm !important;
                 max-height: 297mm !important;
                 background: white !important;
@@ -51,25 +51,16 @@
                 justify-content: space-between !important;
             }
             
-            /* Compact Margins & Spacing to Prevent Page 2 Overflow */
-            .mb-5, .mb-4, .mb-3, .mb-2.5, .mb-2 { margin-bottom: 0.35rem !important; }
-            .p-4, .p-3.5, .p-3 { padding: 0.4rem 0.6rem !important; }
-            .p-2.5, .p-2 { padding: 0.35rem 0.5rem !important; }
-            .py-2, .py-1.5, .py-1 { padding-top: 0.15rem !important; padding-bottom: 0.15rem !important; }
+            /* Enhanced Sizes & Margins for Full Page Fill */
+            .mb-5, .mb-4, .mb-3, .mb-2.5, .mb-2 { margin-bottom: 0.6rem !important; }
+            .p-4, .p-3.5, .p-3 { padding: 0.6rem 0.8rem !important; }
+            .p-2.5, .p-2 { padding: 0.5rem 0.7rem !important; }
+            .py-2, .py-1.5, .py-1 { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
             
-            .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.2rem !important; }
+            .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.35rem !important; }
             .space-y-1.5 > :not([hidden]) ~ :not([hidden]),
-            .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.15rem !important; }
+            .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem !important; }
             
-            /* Perfect Line Alignment for Print */
-            .calc-row {
-                display: flex !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                width: 100% !important;
-                margin-bottom: 0.15rem !important;
-            }
-
             input, select, textarea {
                 border: none !important;
                 background: transparent !important;
@@ -78,19 +69,11 @@
                 color: black !important;
                 appearance: none !important;
                 box-shadow: none !important;
-                height: auto !important;
-                line-height: 1.2 !important;
             }
-
-            textarea {
-                height: 38px !important;
-                overflow: hidden !important;
-            }
-
             .btn-del, .btn-add { display: none !important; }
             
             .monthly-highlight {
-                font-size: 18px !important;
+                font-size: 22px !important;
                 font-weight: 800 !important;
             }
             .print-card-bg {
@@ -101,40 +84,40 @@
             .print-banner-bg {
                 background-color: #1e293b !important;
                 color: white !important;
-                padding: 0.4rem 0.8rem !important;
+                padding: 0.6rem 1rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             .freebie-header-std {
                 background-color: #ecfdf5 !important;
                 border-color: #a7f3d0 !important;
-                padding: 0.25rem 0.5rem !important;
+                padding: 0.4rem 0.6rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             .freebie-header-spc {
                 background-color: #fffbeb !important;
                 border-color: #fde68a !important;
-                padding: 0.25rem 0.5rem !important;
+                padding: 0.4rem 0.6rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             .freebie-item {
-                margin-bottom: 0.1rem !important;
+                margin-bottom: 0.15rem !important;
             }
             .freebie-input {
-                font-size: 11px !important;
-                line-height: 1.2 !important;
+                font-size: 12px !important;
+                line-height: 1.3 !important;
             }
             .grid-cols-1.md\:grid-cols-3 {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 0.5rem !important;
+                gap: 0.75rem !important;
             }
             .grid-cols-1.md\:grid-cols-2 {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 0.5rem !important;
+                gap: 0.75rem !important;
             }
         }
     </style>
