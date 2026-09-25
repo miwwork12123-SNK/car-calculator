@@ -172,7 +172,7 @@
                 🔒
             </div>
             <h2 class="text-xl font-bold text-slate-900 mb-1">เข้าสู่ระบบ</h2>
-            <p class="text-xs text-slate-500 mb-6">กรุณากรอกรหัสผ่านเพื่อเข้าใช้งานระบบ</p>
+            <p class="text-xs text-slate-500 mb-6">กรุณากรอกรหัสผ่านเพื่อเข้าใช้งานระบบเสนอราคา</p>
             
             <form onsubmit="checkPassword(event)" class="space-y-4">
                 <div>
@@ -627,37 +627,99 @@
             document.getElementById('monthlyPayment').innerText = formatNum(monthlyPayment) + " บาท/เดือน";
             
             document.getElementById('dispDown').innerText = formatNum(downAmount) + " ฿";
-            document.getElementById('netDelivery').innerText = formatNum(netDelivery) + " ฿";
+            document.getElementById('netDelivery').innerText = formatNum(netDelivery} + " ฿";
         }
 
+        /* ฟังก์ชันคัดลอกข้อมูลทั้งหมดลงแชท */
         function copyToChat() {
-            const purchaseType = currentPurchaseType === 'cash' ? 'ซื้อเงินสด' : 'จัดไฟแนนซ์';
+            const docDateVal = document.getElementById('docDate').value;
+            const formattedDate = docDateVal ? new Date(docDateVal).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
+            const purchaseType = currentPurchaseType === 'cash' ? 'ซื้อเงินสด (Cash)' : 'จัดไฟแนนซ์ (Finance)';
+            
             const price = document.getElementById('price').value;
+            const cashDiscount = document.getElementById('cashDiscount').value;
             const netPrice = document.getElementById('netPrice').innerText;
-            const totalAllDiscount = document.getElementById('totalAllDiscount').innerText;
+            
+            const redPlate = document.getElementById('redPlate').value;
+            const registrationFee = document.getElementById('registrationFee').value;
+            const otherFee = document.getElementById('otherFee').value;
+            const bookingFee = document.getElementById('bookingFee').value;
+            const downDiscount = document.getElementById('downDiscount').value;
             const netDelivery = document.getElementById('netDelivery').innerText;
-            const campaign = document.getElementById('campaignTerm').value;
+            const totalAllDiscount = document.getElementById('totalAllDiscount').innerText;
 
             let text = `📄 **ใบเสนอราคาและตารางค่างวดรถยนต์**\n`;
-            text += `รูปแบบการซื้อ: ${purchaseType}\n`;
-            text += `ราคารถยนต์: ${price} บาท\n`;
-            text += `สุทธิราคารถยนต์: ${netPrice}\n`;
-            text += `💥 รวมส่วนลดทั้งหมด: ${totalAllDiscount}\n`;
+            text += `📅 **วันที่เสนอราคา:** ${formattedDate}\n`;
+            text += `💳 **รูปแบบการซื้อ:** ${purchaseType}\n`;
+            text += `-----------------------------------\n`;
+            text += `💵 **1. ราคาและส่วนลด**\n`;
+            text += `• ราคารถยนต์มาตรฐาน: ${price} บาท\n`;
+            text += `• ส่วนลดพิเศษ: ${cashDiscount} บาท\n`;
+            text += `• **สุทธิราคารถยนต์:** ${netPrice}\n\n`;
 
             if (currentPurchaseType === 'finance') {
                 const downPercent = document.getElementById('downPercent').value;
                 const downAmount = document.getElementById('downAmount').value;
                 const months = document.getElementById('months').value;
+                const interestRate = document.getElementById('interestRate').value;
+                const chkBeginning = document.getElementById('chkBeginning').checked ? 'ใช่ (จ่ายวันรับรถ)' : 'ไม่ (จ่ายงวดแรกเดือนถัดไป)';
+                const financeAmount = document.getElementById('financeAmount').innerText;
+                const totalInterest = document.getElementById('totalInterest').innerText;
                 const monthlyPayment = document.getElementById('monthlyPayment').innerText;
-                text += `เงินดาวน์: ${downPercent}% (${downAmount} บาท)\n`;
-                text += `ผ่อนชำระ: ${months} งวด (${monthlyPayment})\n`;
+
+                text += `🏦 **2. เงื่อนไขการผ่อนชำระ**\n`;
+                text += `• เงินดาวน์: ${downPercent}% (${downAmount} บาท)\n`;
+                text += `• จำนวนงวด: ${months} งวด\n`;
+                text += `• ดอกเบี้ย: ${interestRate}% ต่อปี\n`;
+                text += `• จ่ายค่างวดแรกวันรับรถ: ${chkBeginning}\n`;
+                text += `• ยอดจัดไฟแนนซ์: ${financeAmount}\n`;
+                text += `• ดอกเบี้ยรวมทั้งหมด: ${totalInterest}\n`;
+                text += `• **ผ่อนชำระประมาณ:** ${monthlyPayment}\n\n`;
             }
 
-            text += `💵 รวมจ่ายวันรับรถ: ${netDelivery}\n\n`;
-            text += `📢 **เงื่อนไข:**\n${campaign}`;
+            text += `🚗 **3. รายการค่าใช้จ่ายวันรับรถ**\n`;
+            text += `• เงินดาวน์สุทธิ: ${document.getElementById('dispDown').innerText}\n`;
+            text += `• มัดจำป้ายแดง: ${redPlate} บาท\n`;
+            text += `• ค่าจดทะเบียน: ${registrationFee} บาท\n`;
+            text += `• ค่าใช้จ่ายอื่นๆ: ${otherFee} บาท\n`;
+            if (currentPurchaseType === 'finance' && document.getElementById('chkBeginning').checked) {
+                text += `• ค่างวดงวดแรก: ${document.getElementById('dispFirstInstallment').innerText}\n`;
+            }
+            text += `• (หัก) มัดจำจอง: ${bookingFee} บาท\n`;
+            text += `• (หัก) ส่วนลดเงินดาวน์: ${downDiscount} บาท\n`;
+            text += `-----------------------------------\n`;
+            text += `💥 **รวมส่วนลดทั้งหมด:** ${totalAllDiscount}\n`;
+            text += `🟢 **รวมจ่ายสุทธิวันรับรถ:** ${netDelivery}\n`;
+            text += `-----------------------------------\n\n`;
+
+            // ดึงรายการของแถมมาตรฐาน
+            const stdInputs = document.querySelectorAll('#standard-container .freebie-input');
+            if (stdInputs.length > 0) {
+                text += `📦 **รายการของแถมมาตรฐาน:**\n`;
+                stdInputs.forEach((input, i) => {
+                    if (input.value.trim()) text += `  ${i + 1}. ${input.value.trim()}\n`;
+                });
+                text += `\n`;
+            }
+
+            // ดึงรายการของแถมพิเศษ
+            const spcInputs = document.querySelectorAll('#special-container .freebie-input');
+            if (spcInputs.length > 0) {
+                text += `✨ **รายการพิเศษ & บริการหลังการขาย:**\n`;
+                spcInputs.forEach((input, i) => {
+                    if (input.value.trim()) text += `  ${i + 1}. ${input.value.trim()}\n`;
+                });
+                text += `\n`;
+            }
+
+            // ดึงเงื่อนไขแคมเปญ
+            const campaign = document.getElementById('campaignTerm').value;
+            if (campaign.trim()) {
+                text += `📢 **เงื่อนไขแคมเปญ / โปรโมชันพิเศษ:**\n${campaign.trim()}`;
+            }
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('คัดลอกข้อมูลเรียบร้อยแล้ว!');
+                alert('คัดลอกข้อมูลทั้งหมดลงแชทเรียบร้อยแล้ว!');
             }).catch(err => {
                 console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
             });
