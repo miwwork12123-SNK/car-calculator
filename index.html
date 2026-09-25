@@ -529,6 +529,11 @@
             const monthlyPayment = document.getElementById('monthlyPayment').innerText;
             const netDelivery = document.getElementById('netDelivery').innerText;
 
+            const redPlate = document.getElementById('redPlate').value || '0';
+            const registrationFee = document.getElementById('registrationFee').value || '0';
+            const bookingFee = document.getElementById('bookingFee').value || '0';
+            const downDiscount = document.getElementById('downDiscount').value || '0';
+
             let text = `🚗 **ใบเสนอราคาตารางค่างวดรถยนต์**\n`;
             text += `💳 รูปแบบการซื้อ: ${purchaseType}\n`;
             text += `💰 ราคาสุทธิ: ${netPrice}\n`;
@@ -546,11 +551,27 @@
                 }
             }
 
+            text += `\n📋 **รายละเอียดค่าใช้จ่ายวันรับรถ:**\n`;
+            if (currentPurchaseType === 'finance') {
+                const downAmount = document.getElementById('downAmount').value;
+                text += `  • เงินดาวน์สุทธิ: ${downAmount} บาท\n`;
+            }
+            text += `  • มัดจำป้ายแดง: ${redPlate} บาท\n`;
+            text += `  • ค่าจดทะเบียน: ${registrationFee} บาท\n`;
+            
             const isBeginning = currentPurchaseType === 'finance' && document.getElementById('chkBeginning').checked;
             if (isBeginning) {
-                text += `💵 ยอดรวมจ่ายวันรับรถ: ${netDelivery} (รวมค่างวดงวดแรกแล้ว)\n\n`;
+                const dispFirstInstallment = document.getElementById('dispFirstInstallment').innerText;
+                text += `  • ค่างวดงวดแรก (Beginning): ${dispFirstInstallment}\n`;
+            }
+            
+            text += `  • หัก เงินมัดจำจอง: -${bookingFee} บาท\n`;
+            text += `  • หัก ส่วนลดเงินดาวน์: -${downDiscount} บาท\n`;
+
+            if (isBeginning) {
+                text += `💵 **รวมจ่ายวันรับรถ: ${netDelivery}** (รวมค่างวดงวดแรกแล้ว)\n\n`;
             } else {
-                text += `💵 ยอดรวมจ่ายวันรับรถ: ${netDelivery}\n\n`;
+                text += `💵 **รวมจ่ายวันรับรถ: ${netDelivery}**\n\n`;
             }
 
             text += `🎁 **รายการของแถมมาตรฐาน:**\n`;
@@ -566,7 +587,7 @@
             text += `\n📌 **เงื่อนไขแคมเปญ / โปรโมชัน:**\n${campaign}\n`;
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('คัดลอกข้อความลงแชทเรียบร้อยแล้ว!');
+                alert('คัดลอกข้อความและรายละเอียดค่าใช้จ่ายลงแชทเรียบร้อยแล้ว!');
             });
         }
 
