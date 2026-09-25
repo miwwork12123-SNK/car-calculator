@@ -22,7 +22,7 @@
             align-items: center;
         }
 
-        /* Mobile Print Single Page Fix */
+        /* Strict Single-Page Print Overrides */
         @media print {
             @page {
                 size: A4 portrait;
@@ -46,21 +46,24 @@
             .print-container {
                 width: 100% !important;
                 max-width: 100% !important;
+                height: 100% !important;
                 max-height: 297mm !important;
-                padding: 6mm 8mm !important;
+                padding: 8mm 10mm !important;
                 box-shadow: none !important;
                 border: none !important;
                 margin: 0 !important;
-                display: block !important;
-                /* บีบสเกลลงเล็กน้อยเพื่อหลบ Header/Footer ของระบบพิมพ์ในมือถือ */
-                transform: scale(0.85) !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                /* Scale down slightly to 100% guarantee single page fit */
+                transform: scale(0.92) !important;
                 transform-origin: top center !important;
             }
 
             .no-print { display: none !important; }
 
             .section-space {
-                margin-bottom: 0.3rem !important;
+                margin-bottom: 0.5rem !important;
             }
 
             input, select, textarea {
@@ -76,13 +79,13 @@
             .btn-del, .btn-add { display: none !important; }
 
             .monthly-highlight {
-                font-size: 13px !important;
+                font-size: 14px !important;
                 font-weight: 800 !important;
             }
 
             .print-card-bg {
                 background-color: #f8fafc !important;
-                padding: 0.35rem !important;
+                padding: 0.5rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -90,7 +93,7 @@
             .print-banner-bg {
                 background-color: #1e293b !important;
                 color: white !important;
-                padding: 0.3rem 0.5rem !important;
+                padding: 0.4rem 0.6rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -98,7 +101,7 @@
             .freebie-header-std {
                 background-color: #ecfdf5 !important;
                 border-color: #a7f3d0 !important;
-                padding: 0.15rem 0.35rem !important;
+                padding: 0.2rem 0.4rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -106,35 +109,35 @@
             .freebie-header-spc {
                 background-color: #fffbeb !important;
                 border-color: #fde68a !important;
-                padding: 0.15rem 0.35rem !important;
+                padding: 0.2rem 0.4rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
             .freebie-item {
-                margin-bottom: 0.02rem !important;
+                margin-bottom: 0.05rem !important;
             }
 
             .freebie-input {
-                font-size: 8px !important;
-                line-height: 1.1 !important;
+                font-size: 9px !important;
+                line-height: 1.2 !important;
                 padding: 0 !important;
             }
 
             .grid-cols-1.md\:grid-cols-3 {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 0.35rem !important;
+                gap: 0.5rem !important;
             }
 
             .grid-cols-1.md\:grid-cols-2 {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 0.35rem !important;
+                gap: 0.5rem !important;
             }
 
             textarea {
-                font-size: 8px !important;
+                font-size: 9px !important;
                 height: auto !important;
             }
         }
@@ -144,7 +147,7 @@
     <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-3 sm:p-5 print-container">
         
         <!-- Header Section -->
-        <div class="flex justify-between items-start border-b pb-1 mb-1 section-space">
+        <div class="flex justify-between items-start border-b pb-1.5 mb-2 section-space">
             <div>
                 <span class="inline-block bg-slate-100 text-slate-500 font-bold text-[9px] px-2 py-0.5 rounded-full mb-0.5 tracking-wider">OFFICIAL SALES QUOTATION</span>
                 <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">ใบเสนอราคาและตารางค่างวดรถยนต์</h1>
@@ -167,10 +170,10 @@
         </div>
 
         <!-- Section 2: Calculation Card & Purchase Type Toggle -->
-        <div class="bg-slate-50/60 p-2 sm:p-2.5 rounded-xl border border-slate-200/90 mb-1 section-space print-card-bg">
+        <div class="bg-slate-50/60 p-2.5 rounded-xl border border-slate-200/90 mb-2 section-space print-card-bg">
             
             <!-- Purchase Type Buttons -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1 border-b border-slate-200 pb-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5 border-b border-slate-200 pb-1.5">
                 <div class="flex items-center gap-1.5">
                     <span class="text-[11px] font-bold text-slate-800">💳 รูปแบบการซื้อ <span class="text-slate-400 font-normal">(Purchase Type):</span></span>
                 </div>
@@ -185,51 +188,51 @@
             </div>
 
             <!-- 3 Columns Calculation Layout -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-1 mb-1">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
                 
                 <!-- Col 1: Price & Discount -->
-                <div class="bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="bg-white p-2 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="text-[9px] font-bold text-slate-500 mb-0.5 border-b pb-0.5">1. ราคาและส่วนลด</h4>
-                        <div class="space-y-0.5 text-[9px]">
+                        <h4 class="text-[10px] font-bold text-slate-500 mb-1 border-b pb-0.5">1. ราคาและส่วนลด</h4>
+                        <div class="space-y-0.5 text-[10px]">
                             <div class="calc-row">
                                 <label class="text-slate-600">ราคารถยนต์มาตรฐาน</label>
-                                <input type="text" id="price" value="950,000" oninput="formatInput(this); calculateFromPercent()" class="w-14 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none">
+                                <input type="text" id="price" value="950,000" oninput="formatInput(this); calculateFromPercent()" class="w-16 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none">
                             </div>
                             <div class="calc-row">
                                 <label class="text-slate-600">ส่วนลดเงินสด</label>
-                                <input type="text" id="cashDiscount" value="30,000" oninput="formatInput(this); calculateFromPercent()" class="w-14 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none">
+                                <input type="text" id="cashDiscount" value="30,000" oninput="formatInput(this); calculateFromPercent()" class="w-16 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none">
                             </div>
                         </div>
                     </div>
-                    <div class="mt-1 pt-0.5 border-t border-slate-100 flex justify-between items-center">
-                        <span class="text-[9px] text-slate-500">สุทธิราคารถยนต์</span>
-                        <div id="netPrice" class="text-[10px] font-extrabold text-blue-900">0 ฿</div>
+                    <div class="mt-1 pt-1 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-[10px] text-slate-500">สุทธิราคารถยนต์</span>
+                        <div id="netPrice" class="text-[11px] font-extrabold text-blue-900">0 ฿</div>
                     </div>
                 </div>
 
                 <!-- Col 2: Finance Conditions -->
-                <div id="financeCol" class="bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div id="financeCol" class="bg-white p-2 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="text-[9px] font-bold text-slate-500 mb-0.5 border-b pb-0.5">2. เงื่อนไขการผ่อนชำระ</h4>
-                        <div class="space-y-0.5 text-[9px]">
+                        <h4 class="text-[10px] font-bold text-slate-500 mb-1 border-b pb-0.5">2. เงื่อนไขการผ่อนชำระ</h4>
+                        <div class="space-y-0.5 text-[10px]">
                             <div>
-                                <label class="block text-slate-600 text-[8px]">เงินดาวน์</label>
+                                <label class="block text-slate-600 text-[9px]">เงินดาวน์</label>
                                 <div class="flex items-center gap-1 justify-between">
                                     <div class="flex items-center gap-0.5 w-1/3">
                                         <input type="number" id="downPercent" value="20" oninput="calculateFromPercent()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-right focus:outline-none">
-                                        <span class="font-bold text-slate-600 text-[8px]">%</span>
+                                        <span class="font-bold text-slate-600 text-[9px]">%</span>
                                     </div>
                                     <div class="flex items-center gap-0.5 w-2/3">
                                         <input type="text" id="downAmount" value="184,000" oninput="formatInput(this); calculateFromAmount()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-right focus:outline-none">
-                                        <span class="font-bold text-slate-600 text-[8px]">บาท</span>
+                                        <span class="font-bold text-slate-600 text-[9px]">บาท</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-0.5 pt-0.5">
+                            <div class="grid grid-cols-2 gap-1 pt-0.5">
                                 <div>
                                     <label class="block text-slate-500 text-[8px]">จำนวนงวด</label>
-                                    <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 focus:outline-none text-[8px]">
+                                    <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 focus:outline-none text-[9px]">
                                         <option value="36">36 งวด</option>
                                         <option value="48">48 งวด</option>
                                         <option value="60" selected>60 งวด</option>
@@ -239,7 +242,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-slate-500 text-[8px]">ดอกเบี้ย (%/ปี)</label>
-                                    <input type="number" step="0.01" id="interestRate" value="2.59" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none text-[8px]">
+                                    <input type="number" step="0.01" id="interestRate" value="2.59" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none text-[9px]">
                                 </div>
                             </div>
                             
@@ -254,45 +257,45 @@
                 </div>
 
                 <!-- Col 3: Delivery Expenses -->
-                <div class="bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="bg-white p-2 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h4 class="text-[9px] font-bold text-slate-500 mb-0.5 border-b pb-0.5">3. ค่าใช้จ่ายวันรับรถ</h4>
-                        <div class="space-y-0.5 text-[8.5px]">
+                        <h4 class="text-[10px] font-bold text-slate-500 mb-1 border-b pb-0.5">3. ค่าใช้จ่ายวันรับรถ</h4>
+                        <div class="space-y-0.5 text-[9px]">
                             <div class="calc-row">
                                 <span class="text-slate-600">เงินดาวน์สุทธิ:</span>
                                 <span id="dispDown" class="font-bold text-slate-900">0 ฿</span>
                             </div>
                             <div class="calc-row">
                                 <span class="text-slate-600">มัดจำป้ายแดง:</span>
-                                <input type="text" id="redPlate" value="3,000" oninput="formatInput(this); calculate()" class="w-10 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold">
+                                <input type="text" id="redPlate" value="3,000" oninput="formatInput(this); calculate()" class="w-12 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold">
                             </div>
                             <div class="calc-row">
                                 <span class="text-slate-600">ค่าจดทะเบียน:</span>
-                                <input type="text" id="registrationFee" value="4,000" oninput="formatInput(this); calculate()" class="w-10 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold">
+                                <input type="text" id="registrationFee" value="4,000" oninput="formatInput(this); calculate()" class="w-12 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold">
                             </div>
                             
-                            <div id="firstInstallmentRow" class="calc-row text-blue-800 font-bold bg-blue-50/80 px-1 py-0.5 rounded text-[8.5px]" style="display: none;">
+                            <div id="firstInstallmentRow" class="calc-row text-blue-800 font-bold bg-blue-50/80 px-1 py-0.5 rounded text-[9px]" style="display: none;">
                                 <span>ค่างวดงวดแรก:</span>
                                 <span id="dispFirstInstallment">0 ฿</span>
                             </div>
                             
                             <div class="calc-row">
                                 <span class="text-slate-600">หัก มัดจำจอง:</span>
-                                <input type="text" id="bookingFee" value="5,000" oninput="formatInput(this); calculate()" class="w-10 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold text-red-600">
+                                <input type="text" id="bookingFee" value="5,000" oninput="formatInput(this); calculate()" class="w-12 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold text-red-600">
                             </div>
                             <div class="calc-row">
                                 <span class="text-slate-600">หัก ส่วนลดดาวน์:</span>
-                                <input type="text" id="downDiscount" value="10,000" oninput="formatInput(this); calculate()" class="w-10 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold text-red-600">
+                                <input type="text" id="downDiscount" value="10,000" oninput="formatInput(this); calculate()" class="w-12 bg-slate-50 border rounded px-1 py-0.5 text-right font-semibold text-red-600">
                             </div>
                         </div>
                     </div>
                     <div class="mt-1 pt-0.5 border-t border-slate-100">
                         <div class="flex justify-between items-end">
                             <div>
-                                <span class="text-[8.5px] font-bold text-emerald-800 block leading-tight">รวมจ่ายวันรับรถ:</span>
+                                <span class="text-[9px] font-bold text-emerald-800 block leading-tight">รวมจ่ายวันรับรถ:</span>
                                 <span id="bgNote" class="text-[7px] text-blue-700 font-normal leading-none" style="display: none;">(รวมค่างวดงวดแรกแล้ว)</span>
                             </div>
-                            <span id="netDelivery" class="text-[10px] font-extrabold text-emerald-600">0 ฿</span>
+                            <span id="netDelivery" class="text-[11px] font-extrabold text-emerald-600">0 ฿</span>
                         </div>
                     </div>
                 </div>
@@ -301,32 +304,32 @@
 
             <!-- Dark Navy Highlight Banner for Finance Summary -->
             <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-lg p-1.5 flex flex-col sm:flex-row justify-between items-center gap-1 shadow-md print-banner-bg">
-                <div class="text-[8.5px] space-y-0.5 text-slate-300 w-full sm:w-auto">
+                <div class="text-[9px] space-y-0.5 text-slate-300 w-full sm:w-auto">
                     <div>ยอดจัดไฟแนนซ์: <span id="financeAmount" class="font-bold text-white">0 บาท</span></div>
                     <div>ดอกเบี้ยรวมทั้งหมด: <span id="totalInterest" class="font-bold text-white">0 บาท</span></div>
                 </div>
                 <div class="text-right w-full sm:w-auto border-t sm:border-t-0 pt-0.5 sm:pt-0 border-slate-700">
                     <div class="text-[8px] text-slate-300">ผ่อนประมาณเดือนละ:</div>
-                    <div id="monthlyPayment" class="text-xs font-extrabold text-amber-400 monthly-highlight">0 บาท/เดือน</div>
+                    <div id="monthlyPayment" class="text-xs sm:text-sm font-extrabold text-amber-400 monthly-highlight">0 บาท/เดือน</div>
                 </div>
             </div>
 
         </div>
 
         <!-- Section 3: Freebies & Accessories -->
-        <div class="mb-1 section-space">
-            <div class="flex items-center gap-1 mb-0.5">
+        <div class="mb-2 section-space">
+            <div class="flex items-center gap-1 mb-1">
                 <span class="text-xs">🎁</span>
-                <h3 class="text-[9.5px] font-extrabold text-slate-900 tracking-wide">
-                    รายการของแถม & อุปกรณ์ตกแต่งสุดคุ้ม <span class="text-slate-400 font-normal text-[8.5px]">(Freebies & Accessories)</span>
+                <h3 class="text-[10px] font-extrabold text-slate-900 tracking-wide">
+                    รายการของแถม & อุปกรณ์ตกแต่งสุดคุ้ม <span class="text-slate-400 font-normal text-[9px]">(Freebies & Accessories)</span>
                 </h3>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <!-- Standard Freebies Container -->
                 <div class="bg-slate-50/90 rounded-lg border border-slate-200 overflow-hidden shadow-sm print-card-bg">
-                    <div class="bg-emerald-50 border-b border-emerald-200 px-1 py-0.5 flex justify-between items-center freebie-header-std">
-                        <span class="text-[9px] font-bold text-emerald-900 flex items-center gap-1">
+                    <div class="bg-emerald-50 border-b border-emerald-200 px-1.5 py-0.5 flex justify-between items-center freebie-header-std">
+                        <span class="text-[10px] font-bold text-emerald-900 flex items-center gap-1">
                             <span class="text-emerald-600">📦</span> รายการของแถมมาตรฐาน
                         </span>
                         <button onclick="addFreebie('standard-container', '')" class="btn-add bg-emerald-600 hover:bg-emerald-700 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm transition no-print">+ เพิ่มรายการ</button>
@@ -336,8 +339,8 @@
 
                 <!-- Special Freebies Container -->
                 <div class="bg-slate-50/90 rounded-lg border border-slate-200 overflow-hidden shadow-sm print-card-bg">
-                    <div class="bg-amber-50 border-b border-amber-200 px-1 py-0.5 flex justify-between items-center freebie-header-spc">
-                        <span class="text-[9px] font-bold text-amber-900 flex items-center gap-1">
+                    <div class="bg-amber-50 border-b border-amber-200 px-1.5 py-0.5 flex justify-between items-center freebie-header-spc">
+                        <span class="text-[10px] font-bold text-amber-900 flex items-center gap-1">
                             <span class="text-amber-500">✨</span> รายการพิเศษ & บริการหลังการขาย
                         </span>
                         <button onclick="addFreebie('special-container', '')" class="btn-add bg-amber-600 hover:bg-amber-700 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm transition no-print">+ เพิ่มรายการ</button>
@@ -348,11 +351,11 @@
         </div>
 
         <!-- Section 4: Campaign Terms -->
-        <div class="bg-amber-50/60 border border-amber-200/80 rounded-lg p-1 text-[8.5px] section-space">
-            <label class="block font-bold text-amber-900 mb-0.5 flex items-center gap-1 text-[8.5px]">
+        <div class="bg-amber-50/60 border border-amber-200/80 rounded-lg p-1.5 text-[9px] section-space">
+            <label class="block font-bold text-amber-900 mb-0.5 flex items-center gap-1 text-[9px]">
                 📢 เงื่อนไขแคมเปญ / โปรโมชันพิเศษ ✏️
             </label>
-            <textarea id="campaignTerm" rows="2" class="w-full bg-white/80 border border-amber-200 rounded-md p-1 text-slate-700 text-[8px] focus:outline-none focus:bg-white resize-none leading-tight" placeholder="ระบุรายละเอียดโปรโมชัน..."></textarea>
+            <textarea id="campaignTerm" rows="2" class="w-full bg-white/80 border border-amber-200 rounded-md p-1 text-slate-700 text-[8.5px] focus:outline-none focus:bg-white resize-none leading-tight" placeholder="ระบุรายละเอียดโปรโมชัน..."></textarea>
         </div>
 
     </div>
@@ -393,9 +396,9 @@
             const div = document.createElement('div');
             div.className = 'flex items-center gap-1 freebie-item';
             div.innerHTML = `
-                <span class="text-blue-600 font-extrabold text-[8px]">✓</span>
-                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="freebie-input flex-1 bg-white border border-slate-200 rounded px-1 py-0.5 text-[8px] font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-none">
-                <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-0.5 text-[8px] no-print">🗑️</button>
+                <span class="text-blue-600 font-extrabold text-[8.5px]">✓</span>
+                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="freebie-input flex-1 bg-white border border-slate-200 rounded px-1 py-0.5 text-[8.5px] font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-none">
+                <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-0.5 text-[8.5px] no-print">🗑️</button>
             `;
             container.appendChild(div);
         }
