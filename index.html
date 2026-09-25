@@ -69,23 +69,21 @@
                 appearance: none !important;
                 box-shadow: none !important;
             }
-            #totalAllDiscount, .text-yellow-300 {
-            color: #facc15 !important; /* สีเหลืองสด */
-            font-size: 13px !important;
-            font-weight: 900 !important;
-        }
+
+            /* สไตล์สำหรับกล่องส่วนลดเวลาพิมพ์ */
             .bg-amber-400 {
-            background-color: #fbbf24 !important;
-            border: 1px solid #f59e0b !important;
-        }
-        .text-red-700 {
-            color: #b91c1c !important;
-        }
-        #totalAllDiscount {
-            color: #dc2626 !important;
-            font-size: 14px !important;
-            font-weight: 900 !important;
-        }
+                background-color: #fbbf24 !important;
+                border: 1px solid #f59e0b !important;
+            }
+            .text-red-700 {
+                color: #b91c1c !important;
+            }
+            #totalAllDiscount {
+                color: #dc2626 !important;
+                font-size: 14px !important;
+                font-weight: 900 !important;
+            }
+
             .btn-del, .btn-add { 
                 display: none !important; 
             }
@@ -204,7 +202,7 @@
                                 <input type="text" id="price" value="950,000" oninput="formatInput(this); calculateFromPercent()" class="w-16 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none">
                             </div>
                             <div class="calc-row">
-                                <label class="text-slate-600">ส่วนลด(พิเศษ)</label>
+                                <label class="text-slate-600">ส่วนลดเงินสด (ต้น)</label>
                                 <input type="text" id="cashDiscount" value="30,000" oninput="formatInput(this); calculateFromPercent()" class="w-16 bg-slate-50 border border-slate-200 rounded p-0.5 font-bold text-slate-800 text-right focus:outline-none">
                             </div>
                         </div>
@@ -306,17 +304,21 @@
 
             </div>
 
-            <!-- Dark Navy Banner + Total Discount Box -->
-            <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-lg p-1 flex flex-col sm:flex-row justify-between items-center gap-1 shadow-md print-banner-bg">
+            <!-- Dark Navy Banner + Yellow Highlight Total Discount Box -->
+            <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-lg p-1.5 flex flex-col sm:flex-row justify-between items-center gap-1 shadow-md print-banner-bg">
                 <div class="text-[8.5px] space-y-0.5 text-slate-300 w-full sm:w-auto">
                     <div>ยอดจัดไฟแนนซ์: <span id="financeAmount" class="font-bold text-white">0 บาท</span></div>
                     <div>ดอกเบี้ยรวมทั้งหมด: <span id="totalInterest" class="font-bold text-white">0 บาท</span></div>
                 </div>
-                <!-- ช่องสรุปส่วนลดรวมทั้งหมด -->
-               <div class="bg-slate-400 border border-yellow-400/50 rounded-lg px-2.5 py-1.5 text-center w-full sm:w-auto shadow-md">
-                    <div class="text-[9px] font-bold text-yellow-700">💥 รวมส่วนลดทั้งหมด (ส่วนลดพิเศษ + ส่วนลดดาวน์)</div>
-                    <div id="totalAllDiscount" class="text-[14px] font-black text-yellow-600 drop-shadow-sm">0 บาท</div>
+                
+                <!-- ช่องสรุปส่วนลดรวมทั้งหมด (พื้นเหลือง ตัวหนังสือแดง) -->
+                <div class="bg-amber-400 border border-amber-500 rounded-xl px-3 py-1.5 text-center w-full sm:w-auto shadow-md">
+                    <div class="text-[9px] font-bold text-red-700 flex items-center justify-center gap-1">
+                        <span>💥</span> รวมส่วนลดทั้งหมด (ต้น + ดาวน์)
+                    </div>
+                    <div id="totalAllDiscount" class="text-[14px] font-black text-red-600 leading-tight">0 บาท</div>
                 </div>
+
                 <div class="text-right w-full sm:w-auto border-t sm:border-t-0 pt-0.5 sm:pt-0 border-slate-700">
                     <div class="text-[7.5px] text-slate-300">ผ่อนประมาณเดือนละ:</div>
                     <div id="monthlyPayment" class="text-xs sm:text-sm font-extrabold text-amber-400 monthly-highlight">0 บาท/เดือน</div>
