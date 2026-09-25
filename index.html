@@ -22,43 +22,50 @@
             align-items: center;
         }
 
-        /* Strict Single-Page A4 Print CSS Fix */
+        /* Strict Single-Page Print Overrides */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0mm !important;
+                margin: 0 !important;
             }
+            
             html, body {
                 width: 210mm !important;
                 height: 297mm !important;
                 max-height: 297mm !important;
                 background: white !important;
                 color: black !important;
-                padding: 6mm 8mm !important;
-                margin: 0 auto !important;
-                font-size: 9.5px !important;
-                line-height: 1.15 !important;
+                padding: 0 !important;
+                margin: 0 !important;
                 overflow: hidden !important;
-                box-sizing: border-box !important;
                 page-break-after: avoid !important;
                 page-break-before: avoid !important;
                 page-break-inside: avoid !important;
             }
-            .no-print { display: none !important; }
+
             .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100% !important;
+                max-height: 297mm !important;
+                padding: 8mm 10mm !important;
                 box-shadow: none !important;
                 border: none !important;
-                padding: 0 !important;
-                max-width: 100% !important;
                 margin: 0 !important;
-                display: block !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                /* Scale down slightly to 100% guarantee single page fit */
+                transform: scale(0.92) !important;
+                transform-origin: top center !important;
             }
-            
-            /* Tight Section Spacing */
+
+            .no-print { display: none !important; }
+
             .section-space {
-                margin-bottom: 0.4rem !important;
+                margin-bottom: 0.5rem !important;
             }
-            
+
             input, select, textarea {
                 border: none !important;
                 background: transparent !important;
@@ -68,59 +75,69 @@
                 appearance: none !important;
                 box-shadow: none !important;
             }
+
             .btn-del, .btn-add { display: none !important; }
-            
+
             .monthly-highlight {
-                font-size: 13px !important;
+                font-size: 14px !important;
                 font-weight: 800 !important;
             }
+
             .print-card-bg {
                 background-color: #f8fafc !important;
-                padding: 0.4rem !important;
+                padding: 0.5rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+
             .print-banner-bg {
                 background-color: #1e293b !important;
                 color: white !important;
-                padding: 0.35rem 0.5rem !important;
+                padding: 0.4rem 0.6rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+
             .freebie-header-std {
                 background-color: #ecfdf5 !important;
                 border-color: #a7f3d0 !important;
-                padding: 0.15rem 0.35rem !important;
+                padding: 0.2rem 0.4rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+
             .freebie-header-spc {
                 background-color: #fffbeb !important;
                 border-color: #fde68a !important;
-                padding: 0.15rem 0.35rem !important;
+                padding: 0.2rem 0.4rem !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+
             .freebie-item {
                 margin-bottom: 0.05rem !important;
             }
+
             .freebie-input {
-                font-size: 8.5px !important;
-                line-height: 1.1 !important;
+                font-size: 9px !important;
+                line-height: 1.2 !important;
                 padding: 0 !important;
             }
+
             .grid-cols-1.md\:grid-cols-3 {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 0.35rem !important;
+                gap: 0.5rem !important;
             }
+
             .grid-cols-1.md\:grid-cols-2 {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 0.35rem !important;
+                gap: 0.5rem !important;
             }
+
             textarea {
-                font-size: 8.5px !important;
+                font-size: 9px !important;
                 height: auto !important;
             }
         }
@@ -130,7 +147,7 @@
     <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-3 sm:p-5 print-container">
         
         <!-- Header Section -->
-        <div class="flex justify-between items-start border-b pb-1 mb-1.5 section-space">
+        <div class="flex justify-between items-start border-b pb-1.5 mb-2 section-space">
             <div>
                 <span class="inline-block bg-slate-100 text-slate-500 font-bold text-[9px] px-2 py-0.5 rounded-full mb-0.5 tracking-wider">OFFICIAL SALES QUOTATION</span>
                 <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">ใบเสนอราคาและตารางค่างวดรถยนต์</h1>
@@ -153,7 +170,7 @@
         </div>
 
         <!-- Section 2: Calculation Card & Purchase Type Toggle -->
-        <div class="bg-slate-50/60 p-2 sm:p-2.5 rounded-xl border border-slate-200/90 mb-1.5 section-space print-card-bg">
+        <div class="bg-slate-50/60 p-2.5 rounded-xl border border-slate-200/90 mb-2 section-space print-card-bg">
             
             <!-- Purchase Type Buttons -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5 border-b border-slate-200 pb-1.5">
@@ -171,7 +188,7 @@
             </div>
 
             <!-- 3 Columns Calculation Layout -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-1.5 mb-1.5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
                 
                 <!-- Col 1: Price & Discount -->
                 <div class="bg-white p-2 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -300,7 +317,7 @@
         </div>
 
         <!-- Section 3: Freebies & Accessories -->
-        <div class="mb-1.5 section-space">
+        <div class="mb-2 section-space">
             <div class="flex items-center gap-1 mb-1">
                 <span class="text-xs">🎁</span>
                 <h3 class="text-[10px] font-extrabold text-slate-900 tracking-wide">
@@ -308,7 +325,7 @@
                 </h3>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <!-- Standard Freebies Container -->
                 <div class="bg-slate-50/90 rounded-lg border border-slate-200 overflow-hidden shadow-sm print-card-bg">
                     <div class="bg-emerald-50 border-b border-emerald-200 px-1.5 py-0.5 flex justify-between items-center freebie-header-std">
