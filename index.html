@@ -615,102 +615,139 @@
             });
         }
 
-        /* ฟังก์ชันบันทึกภาพโดยใช้การคัดลอก DOM (Clone) แก้ตัวอักษรเบลอเด็ดขาด */
-        function saveAsJPG(btnElement) {
-            const srcCard = document.getElementById('quotation-card');
-            const originalBtnText = btnElement.innerHTML;
-            btnElement.innerHTML = "⏳ กำลังสร้างรูปภาพ...";
-            btnElement.disabled = true;
+        /* ฟังก์ชันบันทึกภาพ (ปรับแก้เรื่องตัวอักษรไม่ตรงบรรทัด และรองรับการบันทึกภาพบน iOS / Safari / LINE) */
+function saveAsJPG(btnElement) {
+    const srcCard = document.getElementById('quotation-card');
+    const originalBtnText = btnElement.innerHTML;
+    btnElement.innerHTML = "⏳ กำลังสร้างรูปภาพ...";
+    btnElement.disabled = true;
 
-            // 1. คัดลอก Card ออกมา
-            const clone = srcCard.cloneNode(true);
+    // 1. คัดลอก Card ออกมา
+    const clone = srcCard.cloneNode(true);
 
-            // 2. ซ่อนองค์ประกอบที่ไม่ต้องการบันทึกลงภาพ
-            const ignoreElements = clone.querySelectorAll('[data-html2canvas-ignore="true"], .btn-del, .btn-add, .no-print');
-            ignoreElements.forEach(el => el.remove());
+    // 2. ซ่อนองค์ประกอบที่ไม่ต้องการบันทึกลงภาพ
+    const ignoreElements = clone.querySelectorAll('[data-html2canvas-ignore="true"], .btn-del, .btn-add, .no-print');
+    ignoreElements.forEach(el => el.remove());
 
-            // 3. แปลง input/select/textarea เดิมให้เป็น <div> หรือ <span> ข้อความธรรมดา
-            const srcInputs = srcCard.querySelectorAll('input, select, textarea');
-            const cloneInputs = clone.querySelectorAll('input, select, textarea');
+    // 3. แปลง input/select/textarea เดิมให้เป็น span ข้อความธรรมดาที่ล็อกจัดตำแหน่งบรรทัด
+    const srcInputs = srcCard.querySelectorAll('input, select, textarea');
+    const cloneInputs = clone.querySelectorAll('input, select, textarea');
 
-            srcInputs.forEach((srcInput, idx) => {
-                const cloneInput = cloneInputs[idx];
-                if (!cloneInput) return;
+    srcInputs.forEach((srcInput, idx) => {
+        const cloneInput = cloneInputs[idx];
+        if (!cloneInput) return;
 
-                let valText = srcInput.value;
-                if (srcInput.tagName === 'SELECT') {
-                    valText = srcInput.options[srcInput.selectedIndex] ? srcInput.options[srcInput.selectedIndex].text : srcInput.value;
-                }
-
-                if (srcInput.type === 'checkbox') {
-                    if (srcInput.checked) {
-                        const checkSpan = document.createElement('span');
-                        checkSpan.innerText = '✓ ';
-                        checkSpan.style.fontWeight = 'bold';
-                        checkSpan.style.color = '#2563eb';
-                        cloneInput.parentNode.insertBefore(checkSpan, cloneInput);
-                    }
-                    cloneInput.remove();
-                    return;
-                }
-
-                const fontSpan = document.createElement('span');
-                fontSpan.innerText = valText;
-                
-                // คัดลอกและตั้งค่าสไตล์อย่างชัดเจน
-                const comp = window.getComputedStyle(srcInput);
-                fontSpan.style.fontFamily = "'Prompt', sans-serif";
-                fontSpan.style.fontSize = comp.fontSize;
-                fontSpan.style.fontWeight = "700";
-                fontSpan.style.color = comp.color !== 'rgba(0, 0, 0, 0)' ? comp.color : '#0f172a';
-                fontSpan.style.display = 'inline-block';
-                fontSpan.style.lineHeight = '1.4';
-                fontSpan.style.whiteSpace = 'pre-wrap';
-                
-                if (srcInput.classList.contains('text-right')) {
-                    fontSpan.style.textAlign = 'right';
-                }
-
-                cloneInput.parentNode.replaceChild(fontSpan, cloneInput);
-            });
-
-            // 4. นำ Clone ไปวางซ่อนไว้นอกหน้าจอเพื่อเรนเดอร์
-            const wrapper = document.createElement('div');
-            wrapper.style.position = 'absolute';
-            wrapper.style.left = '-9999px';
-            wrapper.style.top = '0';
-            wrapper.style.width = srcCard.offsetWidth + 'px';
-            wrapper.appendChild(clone);
-            document.body.appendChild(wrapper);
-
-            // 5. เรียก html2canvas เพื่อเรนเดอร์ภาพจาก Clone
-            setTimeout(() => {
-                html2canvas(clone, {
-                    scale: 2.5, // ความคมชัดระดับสูง
-                    useCORS: true,
-                    backgroundColor: "#ffffff",
-                    logging: false
-                }).then(canvas => {
-                    const imageJPG = canvas.toDataURL("image/jpeg", 0.95);
-                    const link = document.createElement('a');
-                    link.download = `ใบเสนอราคา_${new Date().toISOString().slice(0,10)}.jpg`;
-                    link.href = imageJPG;
-                    link.click();
-
-                    // ลบ wrapper ชั่วคราวและคืนค่าปุ่ม
-                    document.body.removeChild(wrapper);
-                    btnElement.innerHTML = originalBtnText;
-                    btnElement.disabled = false;
-                }).catch(err => {
-                    console.error("Save image failed: ", err);
-                    if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
-                    alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
-                    btnElement.innerHTML = originalBtnText;
-                    btnElement.disabled = false;
-                });
-            }, 150);
+        let valText = srcInput.value;
+        if (srcInput.tagName === 'SELECT') {
+            valText = srcInput.options[srcInput.selectedIndex] ? srcInput.options[srcInput.selectedIndex].text : srcInput.value;
         }
 
+        if (srcInput.type === 'checkbox') {
+            if (srcInput.checked) {
+                const checkSpan = document.createElement('span');
+                checkSpan.innerText = '✓ ';
+                checkSpan.style.fontWeight = 'bold';
+                checkSpan.style.color = '#2563eb';
+                checkSpan.style.display = 'inline-block';
+                checkSpan.style.verticalAlign = 'middle';
+                cloneInput.parentNode.insertBefore(checkSpan, cloneInput);
+            }
+            cloneInput.remove();
+            return;
+        }
+
+        const fontSpan = document.createElement('span');
+        fontSpan.innerText = valText;
+        
+        const comp = window.getComputedStyle(srcInput);
+        
+        // ล็อกคุณสมบัติเพื่อให้ข้อความจัดตรงกลางบรรทัดพอดี
+        fontSpan.style.fontFamily = "'Prompt', sans-serif";
+        fontSpan.style.fontSize = comp.fontSize;
+        fontSpan.style.fontWeight = "700";
+        fontSpan.style.color = comp.color !== 'rgba(0, 0, 0, 0)' && comp.color !== 'transparent' ? comp.color : '#0f172a';
+        fontSpan.style.display = 'inline-flex';
+        fontSpan.style.alignItems = 'center';
+        fontSpan.style.justifyContent = srcInput.classList.contains('text-right') ? 'flex-end' : 'flex-start';
+        fontSpan.style.width = comp.width;
+        fontSpan.style.height = comp.height;
+        fontSpan.style.padding = comp.padding;
+        fontSpan.style.margin = '0';
+        fontSpan.style.lineHeight = '1';
+        fontSpan.style.verticalAlign = 'middle';
+        fontSpan.style.boxSizing = 'border-box';
+        fontSpan.style.whiteSpace = 'pre-wrap';
+
+        cloneInput.parentNode.replaceChild(fontSpan, cloneInput);
+    });
+
+    // 4. นำ Clone ไปวางซ่อนไว้นอกหน้าจอ
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = '-9999px';
+    wrapper.style.top = '0';
+    wrapper.style.width = srcCard.offsetWidth + 'px';
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
+
+    // 5. ตรวจสอบอุปกรณ์ว่าเป็น iOS หรือไม่
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // 6. เรนเดอร์เป็นภาพ
+    setTimeout(() => {
+        html2canvas(clone, {
+            scale: 2.5,
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            logging: false
+        }).then(canvas => {
+            const imageJPG = canvas.toDataURL("image/jpeg", 0.95);
+
+            if (isIOS) {
+                // สำหรับ iOS / iPhone: เปิดภาพในแท็บใหม่เพื่อให้แตะค้างแล้วกด "บันทึกไปยังแอปรูปภาพ" ได้ทันที
+                const newWindow = window.open("");
+                if (newWindow) {
+                    newWindow.document.write(`
+                        <html>
+                            <head>
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>บันทึกรูปภาพ</title>
+                                <style>
+                                    body { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #333; color: #fff; font-family: sans-serif; min-height: 100vh; padding: 10px; box-sizing: border-box; }
+                                    p { font-size: 14px; margin-bottom: 12px; text-align: center; background: rgba(0,0,0,0.6); padding: 8px 16px; border-radius: 20px; }
+                                    img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+                                </style>
+                            </head>
+                            <body>
+                                <p>💡 แตะที่รูปค้างไว้ แล้วเลือก <b>"บันทึกไปยังแอปรูปภาพ" (Save to Photos)</b></p>
+                                <img src="${imageJPG}" />
+                            </body>
+                        </html>
+                    `);
+                } else {
+                    // หากโดนบล็อก Pop-up ให้แสดงรูปในหน้าปัจจุบันแทน
+                    window.location.href = imageJPG;
+                }
+            } else {
+                // สำหรับ Android / PC: ดาวน์โหลดไฟล์ตามปกติ
+                const link = document.createElement('a');
+                link.download = `ใบเสนอราคา_${new Date().toISOString().slice(0,10)}.jpg`;
+                link.href = imageJPG;
+                link.click();
+            }
+
+            document.body.removeChild(wrapper);
+            btnElement.innerHTML = originalBtnText;
+            btnElement.disabled = false;
+        }).catch(err => {
+            console.error("Save image failed: ", err);
+            if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+            alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
+            btnElement.innerHTML = originalBtnText;
+            btnElement.disabled = false;
+        });
+    }, 150);
+}
         window.onload = function() {
             initFreebies();
             calculateFromPercent();
