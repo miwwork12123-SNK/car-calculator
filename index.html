@@ -1,101 +1,720 @@
-/* ฟังก์ชันบันทึกภาพ ปรับแก้ตัวหนังสือเลื่อนไม่ตรงบรรทัด */
-function saveAsJPG(btnElement) {
-    const srcCard = document.getElementById('quotation-card');
-    const originalBtnText = btnElement.innerHTML;
-    btnElement.innerHTML = "⏳ กำลังสร้างรูปภาพ...";
-    btnElement.disabled = true;
-
-    // 1. คัดลอก Card ออกมา
-    const clone = srcCard.cloneNode(true);
-
-    // 2. ซ่อนองค์ประกอบที่ไม่ต้องการบันทึกลงภาพ
-    const ignoreElements = clone.querySelectorAll('[data-html2canvas-ignore="true"], .btn-del, .btn-add, .no-print');
-    ignoreElements.forEach(el => el.remove());
-
-    // 3. แปลง input/select/textarea เดิมให้เป็น span ข้อความธรรมดาที่ล็อกจัดตำแหน่งบรรทัด
-    const srcInputs = srcCard.querySelectorAll('input, select, textarea');
-    const cloneInputs = clone.querySelectorAll('input, select, textarea');
-
-    srcInputs.forEach((srcInput, idx) => {
-        const cloneInput = cloneInputs[idx];
-        if (!cloneInput) return;
-
-        let valText = srcInput.value;
-        if (srcInput.tagName === 'SELECT') {
-            valText = srcInput.options[srcInput.selectedIndex] ? srcInput.options[srcInput.selectedIndex].text : srcInput.value;
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบเสนอราคาและตารางค่างวดรถยนต์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            font-family: 'Prompt', sans-serif; 
+            box-sizing: border-box; 
+        }
+        
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        if (srcInput.type === 'checkbox') {
-            if (srcInput.checked) {
-                const checkSpan = document.createElement('span');
-                checkSpan.innerText = '✓ ';
-                checkSpan.style.fontWeight = 'bold';
-                checkSpan.style.color = '#2563eb';
-                checkSpan.style.display = 'inline-block';
-                checkSpan.style.verticalAlign = 'middle';
-                cloneInput.parentNode.insertBefore(checkSpan, cloneInput);
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 6mm 8mm !important;
             }
-            cloneInput.remove();
-            return;
+            
+            html, body {
+                width: 100% !important;
+                height: 100% !important;
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100% !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .no-print { 
+                display: none !important; 
+            }
+
+            .section-space {
+                margin-bottom: 0.6rem !important;
+            }
+
+            input, select, textarea {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                font-weight: 700 !important;
+                color: black !important;
+                appearance: none !important;
+                box-shadow: none !important;
+            }
+
+            .bg-amber-400 {
+                background-color: #fbbf24 !important;
+                border: 2px solid #f59e0b !important;
+            }
+            .text-red-700 {
+                color: #b91c1c !important;
+            }
+            #totalAllDiscount {
+                color: #dc2626 !important;
+                font-size: 22px !important;
+                font-weight: 900 !important;
+            }
+
+            .btn-del, .btn-add { 
+                display: none !important; 
+            }
+
+            .monthly-highlight {
+                font-size: 22px !important;
+                font-weight: 900 !important;
+            }
+
+            .print-card-bg {
+                background-color: #f8fafc !important;
+                padding: 0.8rem !important;
+            }
+
+            .print-banner-bg {
+                background-color: #1e293b !important;
+                color: white !important;
+                padding: 0.8rem 1rem !important;
+            }
+
+            .freebie-header-std {
+                background-color: #ecfdf5 !important;
+                border-color: #a7f3d0 !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+
+            .freebie-header-spc {
+                background-color: #fffbeb !important;
+                border-color: #fde68a !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+
+            .freebie-item {
+                margin-bottom: 0.2rem !important;
+            }
+
+            .freebie-input {
+                font-size: 14px !important;
+                line-height: 1.3 !important;
+                padding: 0 !important;
+                font-weight: 600 !important;
+            }
+
+            .grid-cols-1.md\:grid-cols-3 {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 0.6rem !important;
+            }
+
+            .grid-cols-1.md\:grid-cols-2 {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 0.6rem !important;
+            }
+
+            textarea {
+                font-size: 14px !important;
+                height: auto !important;
+            }
+
+            .text-[10px], .text-[11px], .text-[9px], .text-[8px] {
+                font-size: 13px !important;
+            }
+            .text-xs {
+                font-size: 14px !important;
+            }
+            .text-sm {
+                font-size: 16px !important;
+            }
+            .text-base {
+                font-size: 18px !important;
+            }
+            .text-lg {
+                font-size: 22px !important;
+            }
+            .text-xl {
+                font-size: 26px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen p-3 sm:p-6 text-slate-800">
+    <div id="quotation-card" class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 sm:p-8 print-container">
+        
+        <!-- Header Section -->
+        <div class="flex justify-between items-start border-b pb-3 mb-3 section-space">
+            <div>
+                <span class="inline-block bg-slate-100 text-slate-600 font-bold text-sm px-3 py-1 rounded-full mb-1 tracking-wider">OFFICIAL SALES QUOTATION</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">ใบเสนอราคาและตารางค่างวดรถยนต์</h1>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <div class="bg-slate-50 border rounded-lg px-3 py-1.5 flex items-center gap-2 text-base">
+                    <span class="text-slate-600 font-bold">วันที่เสนอราคา:</span>
+                    <input type="date" id="docDate" class="bg-transparent font-bold text-slate-900 focus:outline-none">
+                </div>
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap justify-end gap-2 no-print" data-html2canvas-ignore="true">
+                    <button onclick="copyToChat()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold py-2 px-3.5 rounded-lg flex items-center gap-1 shadow transition">
+                        📋 คัดลอกลงแชท
+                    </button>
+                    <button onclick="saveAsJPG(this)" class="bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold py-2 px-3.5 rounded-lg flex items-center gap-1 shadow transition">
+                        🖼️ บันทึกเป็นภาพ (JPG)
+                    </button>
+                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold py-2 px-3.5 rounded-lg flex items-center gap-1 shadow transition">
+                        🖨️ พิมพ์ / บันทึก PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Calculation Card -->
+        <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200 mb-3 section-space print-card-bg">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 border-b border-slate-200 pb-2.5">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-base sm:text-lg font-bold text-slate-900">💳 รูปแบบการซื้อ <span class="text-slate-500 font-normal text-sm sm:text-base">(Purchase Type):</span></span>
+                </div>
+                <div class="flex bg-slate-200/80 p-1 rounded-lg w-full sm:w-auto" data-html2canvas-ignore="true">
+                    <button id="btnFinance" onclick="setPurchaseType('finance')" class="flex-1 sm:flex-initial py-1.5 px-4 rounded-md text-xs sm:text-sm font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1">
+                        🏦 จัดไฟแนนซ์ (Finance)
+                    </button>
+                    <button id="btnCash" onclick="setPurchaseType('cash')" class="flex-1 sm:flex-initial py-1.5 px-4 rounded-md text-xs sm:text-sm font-bold transition-all text-slate-700 hover:text-slate-900 flex items-center justify-center gap-1">
+                        💵 ซื้อเงินสด (Cash)
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                <!-- Col 1 -->
+                <div class="bg-white p-3.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-700 mb-2.5 border-b pb-1">1. ราคาและส่วนลด</h4>
+                        <div class="space-y-2.5 text-xs sm:text-sm">
+                            <div class="calc-row">
+                                <label class="text-slate-700 font-medium">ราคารถยนต์มาตรฐาน</label>
+                                <input type="text" id="price" value="579,900" oninput="formatInput(this); calculateFromPercent()" class="w-24 bg-slate-50 border border-slate-200 rounded p-1 font-extrabold text-slate-900 text-right focus:outline-none">
+                            </div>
+                            <div class="calc-row">
+                                <label class="text-slate-700 font-medium">ส่วนลดพิเศษ</label>
+                                <input type="text" id="cashDiscount" value="30,000" oninput="formatInput(this); calculateFromPercent()" class="w-24 bg-slate-50 border border-slate-200 rounded p-1 font-extrabold text-slate-900 text-right focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-xs sm:text-sm font-bold text-slate-600">สุทธิราคารถยนต์</span>
+                        <div id="netPrice" class="text-lg sm:text-xl font-black text-blue-900">0 ฿</div>
+                    </div>
+                </div>
+
+                <!-- Col 2 -->
+                <div id="financeCol" class="bg-white p-3.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-700 mb-2.5 border-b pb-1">2. เงื่อนไขการผ่อนชำระ</h4>
+                        <div class="space-y-2.5 text-xs sm:text-sm">
+                            <div>
+                                <label class="block text-slate-700 font-medium mb-1">เงินดาวน์</label>
+                                <div class="flex items-center gap-1 justify-between">
+                                    <div class="flex items-center gap-0.5 w-1/3">
+                                        <input type="number" id="downPercent" value="25" oninput="calculateFromPercent()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-extrabold text-right focus:outline-none">
+                                        <span class="font-bold text-slate-700 text-xs sm:text-sm">%</span>
+                                    </div>
+                                    <div class="flex items-center gap-0.5 w-2/3">
+                                        <input type="text" id="downAmount" value="137,475" oninput="formatInput(this); calculateFromAmount()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-extrabold text-right focus:outline-none">
+                                        <span class="font-bold text-slate-700 text-xs sm:text-sm">บาท</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <div>
+                                    <label class="block text-slate-600 text-xs sm:text-sm font-medium">จำนวนงวด</label>
+                                    <select id="months" onchange="onMonthChange()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-extrabold text-slate-900 focus:outline-none text-xs sm:text-sm">
+                                        <option value="36">36 งวด</option>
+                                        <option value="48" selected>48 งวด</option>
+                                        <option value="60">60 งวด</option>
+                                        <option value="72">72 งวด</option>
+                                        <option value="84">84 งวด</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-600 text-xs sm:text-sm font-medium">ดอกเบี้ย (%/ปี)</label>
+                                    <input type="number" step="0.01" id="interestRate" value="1.89" oninput="calculate()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-extrabold text-slate-900 text-right focus:outline-none text-xs sm:text-sm">
+                                </div>
+                            </div>
+                            
+                            <div class="pt-1.5 border-t border-slate-100">
+                                <label class="flex items-center gap-1.5 cursor-pointer font-bold text-blue-900 text-xs sm:text-sm">
+                                    <input type="checkbox" id="chkBeginning" onchange="calculate()" class="w-4 h-4 text-blue-600 rounded focus:ring-0">
+                                    จ่ายค่างวดแรกวันรับรถ
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="bg-white p-3.5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-700 mb-2.5 border-b pb-1">3. ค่าใช้จ่ายวันรับรถ</h4>
+                        <div class="space-y-2 text-xs sm:text-sm">
+                            <div class="calc-row">
+                                <span class="text-slate-700">เงินดาวน์สุทธิ:</span>
+                                <span id="dispDown" class="font-bold text-slate-900">0 ฿</span>
+                            </div>
+                            <div class="calc-row">
+                                <span class="text-slate-700">มัดจำป้ายแดง:</span>
+                                <input type="text" id="redPlate" value="3,000" oninput="formatInput(this); calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-bold text-slate-900">
+                            </div>
+                            <div class="calc-row">
+                                <span class="text-slate-700">ค่าจดทะเบียน:</span>
+                                <input type="text" id="registrationFee" value="4,000" oninput="formatInput(this); calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-bold text-slate-900">
+                            </div>
+                            <div class="calc-row">
+                                <span class="text-slate-700">อื่นๆ:</span>
+                                <input type="text" id="otherFee" value="0" oninput="formatInput(this); calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-bold text-slate-900">
+                            </div>
+                            
+                            <div id="firstInstallmentRow" class="calc-row text-blue-900 font-bold bg-blue-50/80 px-1.5 py-0.5 rounded text-xs" style="display: none;">
+                                <span>ค่างวดงวดแรก:</span>
+                                <span id="dispFirstInstallment">0 ฿</span>
+                            </div>
+                            
+                            <div class="calc-row">
+                                <span class="text-slate-700">หัก มัดจำจอง:</span>
+                                <input type="text" id="bookingFee" value="5,000" oninput="formatInput(this); calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-bold text-red-600">
+                            </div>
+                            <div class="calc-row">
+                                <span class="text-slate-700">หัก ส่วนลดเงินดาวน์:</span>
+                                <input type="text" id="downDiscount" value="10,000" oninput="formatInput(this); calculate()" class="w-20 bg-slate-50 border rounded px-1.5 py-0.5 text-right font-bold text-red-600">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-100">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <span class="text-xs sm:text-sm font-bold text-emerald-800 block leading-tight">รวมจ่ายวันรับรถ:</span>
+                                <span id="bgNote" class="text-[10px] text-blue-700 font-normal leading-none" style="display: none;">(รวมค่างวดงวดแรกแล้ว)</span>
+                            </div>
+                            <span id="netDelivery" class="text-lg sm:text-xl font-black text-emerald-600">0 ฿</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Banner -->
+            <div id="financeSummaryBanner" class="bg-slate-900 text-white rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-3 shadow-md print-banner-bg">
+                <div class="text-xs sm:text-sm space-y-1 text-slate-200 w-full sm:w-auto">
+                    <div>ยอดจัดไฟแนนซ์: <span id="financeAmount" class="font-extrabold text-white">0 บาท</span></div>
+                    <div>ดอกเบี้ยรวมทั้งหมด: <span id="totalInterest" class="font-extrabold text-white">0 บาท</span></div>
+                </div>
+                
+                <div class="bg-amber-400 border-2 border-amber-500 rounded-xl px-5 py-2 text-center w-full sm:w-auto shadow-md">
+                    <div class="text-xs sm:text-sm font-extrabold text-red-800 flex items-center justify-center gap-1">
+                        <span>💥</span> รวมส่วนลดทั้งหมด (ส่วนลดพิเศษ + ส่วนลดดาวน์)
+                    </div>
+                    <div id="totalAllDiscount" class="text-xl sm:text-2xl font-black text-red-600 leading-tight">0 บาท</div>
+                </div>
+
+                <div class="text-right w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-700">
+                    <div class="text-xs sm:text-sm text-slate-300">ผ่อนประมาณเดือนละ:</div>
+                    <div id="monthlyPayment" class="text-lg sm:text-xl font-black text-amber-400 monthly-highlight">0 บาท/เดือน</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Freebies Section -->
+        <div class="mb-3 section-space">
+            <div class="flex items-center gap-1.5 mb-2">
+                <span class="text-lg">🎁</span>
+                <h3 class="text-base font-extrabold text-slate-900 tracking-wide">
+                    รายการของแถม & อุปกรณ์ตกแต่งสุดคุ้ม <span class="text-slate-500 font-medium text-xs sm:text-sm">(Freebies & Accessories)</span>
+                </h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="bg-slate-50/90 rounded-xl border border-slate-200 overflow-hidden shadow-sm print-card-bg">
+                    <div class="bg-emerald-50 border-b border-emerald-200 px-3.5 py-2 flex justify-between items-center freebie-header-std">
+                        <span class="text-xs sm:text-sm font-extrabold text-emerald-900 flex items-center gap-1">
+                            <span class="text-emerald-600">📦</span> รายการของแถมมาตรฐาน
+                        </span>
+                        <button onclick="addFreebie('standard-container', '')" class="btn-add bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-2.5 py-1 rounded shadow transition no-print" data-html2canvas-ignore="true">+ เพิ่มรายการ</button>
+                    </div>
+                    <div id="standard-container" class="p-2.5 space-y-1.5"></div>
+                </div>
+
+                <div class="bg-slate-50/90 rounded-xl border border-slate-200 overflow-hidden shadow-sm print-card-bg">
+                    <div class="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex justify-between items-center freebie-header-spc">
+                        <span class="text-xs sm:text-sm font-extrabold text-amber-900 flex items-center gap-1">
+                            <span class="text-amber-500">✨</span> รายการพิเศษ & บริการหลังการขาย
+                        </span>
+                        <button onclick="addFreebie('special-container', '')" class="btn-add bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-2.5 py-1 rounded shadow transition no-print" data-html2canvas-ignore="true">+ เพิ่มรายการ</button>
+                    </div>
+                    <div id="special-container" class="p-2.5 space-y-1.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Terms -->
+        <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-xs sm:text-sm section-space">
+            <label class="block font-bold text-amber-950 mb-1 flex items-center gap-1 text-sm">
+                📢 เงื่อนไขแคมเปญ / โปรโมชันพิเศษ ✏️
+            </label>
+            <textarea id="campaignTerm" rows="2" class="w-full bg-white/90 border border-amber-200 rounded-md p-2 text-slate-800 text-xs sm:text-sm font-semibold focus:outline-none focus:bg-white resize-none leading-relaxed" placeholder="ระบุรายละเอียดโปรโมชัน..."></textarea>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('docDate').valueAsDate = new Date();
+        document.getElementById('campaignTerm').value = "เงื่อนไขแคมเปญ จอง และรับรถ ภายในวันที่ 30 กันยายน 2569\n*ขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบล่วงหน้า";
+
+        const initialStandard = [
+            "ประกันภัยชั้น 1 (คุ้มครอง 1 ปี)",
+            "พ.ร.บ. คุ้มครอง 1 ปี",
+            "กรอบป้ายทะเบียน MG (2 ชิ้น/ชุด)",
+            "พรมปูพื้น MG แท้",
+            "ขัดเคลือบสีเงาวับก่อนส่งมอบ",
+            "กระเป๋าใส่เอกสาร MG",
+            "รับประกันยาง 2 ปี หรือ 50,000 กม.",
+            "รับประกันตัวรถ 4 ปี หรือ 120,000 กม.",
+            "รับประกันแบตเตอรี่ / มอเตอร์ / ชุดควบคุม ตลอดชีพ",
+            "เครื่อง Home Charger + ฟรีค่าติดตั้ง",
+            "ชุดชาร์จฉุกเฉิน Emergency Charger"
+        ];
+
+        const initialSpecial = [
+            "ฟิล์มกรองแสงรอบคัน",
+            "ฟรีค่าแรงเช็กระยะ 5 ครั้ง หรือ 50,000 กม.",
+            "กระเป๋าเล่มคู่มือประจำรถ",
+            "ฟรีตรวจ PDI รอบคันอย่างรายละเอียด 3 ขั้นตอน",
+            "บริการช่วยเหลือฉุกเฉิน & รถลาก 24 ชม.",
+            "Call Center บริการทุกวัน 24 ชม.",
+            "Courtesy Car (รถใช้ระหว่างซ่อมกรณีเกิน 4 วัน)",
+            "Mobile Service ตรวจเช็คนอกสถานที่",
+            "ให้คำปรึกษาหลังการขาย + บริการรถยกเคลม",
+            "สิทธิประโยชน์ ฟรีภาษี / ฟรี VAT 7% / ฟรี VAT 3%"
+        ];
+
+        function addFreebie(containerId, textValue) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-1.5 freebie-item';
+            div.innerHTML = `
+                <span class="text-blue-600 font-extrabold text-sm">✓</span>
+                <input type="text" value="${textValue}" placeholder="ระบุรายการ..." class="freebie-input flex-1 bg-white border border-slate-200 rounded px-2 py-1 text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-500 shadow-none">
+                <button onclick="this.parentElement.remove()" class="btn-del text-slate-400 hover:text-red-500 font-bold px-1 text-xs no-print" data-html2canvas-ignore="true">🗑️</button>
+            `;
+            container.appendChild(div);
         }
 
-        const fontSpan = document.createElement('span');
-        fontSpan.innerText = valText;
-        
-        const comp = window.getComputedStyle(srcInput);
-        
-        // ล็อกคุณสมบัติเพื่อให้ข้อความจัดตรงกลางบรรทัดเดียวกับข้อความข้างเคียง
-        fontSpan.style.fontFamily = "'Prompt', sans-serif";
-        fontSpan.style.fontSize = comp.fontSize;
-        fontSpan.style.fontWeight = "700";
-        fontSpan.style.color = comp.color !== 'rgba(0, 0, 0, 0)' && comp.color !== 'transparent' ? comp.color : '#0f172a';
-        fontSpan.style.display = 'inline-flex';
-        fontSpan.style.alignItems = 'center';
-        fontSpan.style.justifyContent = srcInput.classList.contains('text-right') ? 'flex-end' : 'flex-start';
-        fontSpan.style.width = comp.width;
-        fontSpan.style.height = comp.height;
-        fontSpan.style.padding = comp.padding;
-        fontSpan.style.margin = '0';
-        fontSpan.style.lineHeight = '1';
-        fontSpan.style.verticalAlign = 'middle';
-        fontSpan.style.boxSizing = 'border-box';
-        fontSpan.style.whiteSpace = 'pre-wrap';
+        function initFreebies() {
+            initialStandard.forEach(item => addFreebie('standard-container', item));
+            initialSpecial.forEach(item => addFreebie('special-container', item));
+        }
 
-        cloneInput.parentNode.replaceChild(fontSpan, cloneInput);
-    });
+        function parseNum(val) {
+            if (!val) return 0;
+            return parseFloat(val.toString().replace(/,/g, '')) || 0;
+        }
 
-    // 4. นำ Clone ไปวางซ่อนไว้นอกหน้าจอ
-    const wrapper = document.createElement('div');
-    wrapper.style.position = 'absolute';
-    wrapper.style.left = '-9999px';
-    wrapper.style.top = '0';
-    wrapper.style.width = srcCard.offsetWidth + 'px';
-    wrapper.appendChild(clone);
-    document.body.appendChild(wrapper);
+        function formatNum(num) {
+            return new Intl.NumberFormat('th-TH').format(Math.round(num));
+        }
 
-    // 5. เรนเดอร์เป็นภาพ
-    setTimeout(() => {
-        html2canvas(clone, {
-            scale: 2.5,
-            useCORS: true,
-            backgroundColor: "#ffffff",
-            logging: false
-        }).then(canvas => {
-            const imageJPG = canvas.toDataURL("image/jpeg", 0.95);
-            const link = document.createElement('a');
-            link.download = `ใบเสนอราคา_${new Date().toISOString().slice(0,10)}.jpg`;
-            link.href = imageJPG;
-            link.click();
+        function formatInput(input) {
+            let cursorPosition = input.selectionStart;
+            let originalLength = input.value.length;
+            let num = parseNum(input.value);
+            if (num === 0 && input.value.trim() === "") {
+                input.value = "";
+                return;
+            }
+            input.value = formatNum(num);
+            let newLength = input.value.length;
+            cursorPosition = cursorPosition + (newLength - originalLength);
+            input.setSelectionRange(cursorPosition, cursorPosition);
+        }
 
-            document.body.removeChild(wrapper);
-            btnElement.innerHTML = originalBtnText;
-            btnElement.disabled = false;
-        }).catch(err => {
-            console.error("Save image failed: ", err);
-            if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
-            alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
-            btnElement.innerHTML = originalBtnText;
-            btnElement.disabled = false;
-        });
-    }, 150);
-}
+        let currentPurchaseType = 'finance';
+
+        function setPurchaseType(type) {
+            currentPurchaseType = type;
+            const btnFinance = document.getElementById('btnFinance');
+            const btnCash = document.getElementById('btnCash');
+            const financeCol = document.getElementById('financeCol');
+            const financeSummaryBanner = document.getElementById('financeSummaryBanner');
+
+            if (type === 'cash') {
+                btnCash.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-md text-xs sm:text-sm font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1";
+                btnFinance.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-md text-xs sm:text-sm font-bold transition-all text-slate-700 hover:text-slate-900 flex items-center justify-center gap-1";
+                
+                financeCol.style.opacity = '0.4';
+                financeCol.style.pointerEvents = 'none';
+                financeSummaryBanner.style.display = 'none';
+            } else {
+                btnFinance.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-md text-xs sm:text-sm font-bold transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1";
+                btnCash.className = "flex-1 sm:flex-initial py-1.5 px-4 rounded-md text-xs sm:text-sm font-bold transition-all text-slate-700 hover:text-slate-900 flex items-center justify-center gap-1";
+                
+                financeCol.style.opacity = '1';
+                financeCol.style.pointerEvents = 'auto';
+                financeSummaryBanner.style.display = 'flex';
+            }
+            calculateFromPercent();
+        }
+
+        const defaultRates = { 36: 2.59, 48: 2.59, 60: 2.59, 72: 2.89, 84: 3.19 };
+
+        function onMonthChange() {
+            const m = document.getElementById('months').value;
+            if (defaultRates[m]) {
+                document.getElementById('interestRate').value = defaultRates[m];
+            }
+            calculate();
+        }
+
+        function calculateFromPercent() {
+            const price = parseNum(document.getElementById('price').value);
+            const cashDiscount = parseNum(document.getElementById('cashDiscount').value);
+            const netPrice = price - cashDiscount;
+
+            const downPercent = parseFloat(document.getElementById('downPercent').value) || 0;
+            const downAmount = netPrice * (downPercent / 100);
+
+            document.getElementById('downAmount').value = formatNum(downAmount);
+            calculate();
+        }
+
+        function calculateFromAmount() {
+            const price = parseNum(document.getElementById('price').value);
+            const cashDiscount = parseNum(document.getElementById('cashDiscount').value);
+            const netPrice = price - cashDiscount;
+
+            const downAmount = parseNum(document.getElementById('downAmount').value);
+            
+            if (netPrice > 0) {
+                const downPercent = (downAmount / netPrice) * 100;
+                document.getElementById('downPercent').value = parseFloat(downPercent.toFixed(2));
+            } else {
+                document.getElementById('downPercent').value = 0;
+            }
+            calculate();
+        }
+
+        function calculate() {
+            const price = parseNum(document.getElementById('price').value);
+            const cashDiscount = parseNum(document.getElementById('cashDiscount').value);
+            const netPrice = price - cashDiscount;
+
+            const redPlate = parseNum(document.getElementById('redPlate').value);
+            const registrationFee = parseNum(document.getElementById('registrationFee').value);
+            const otherFee = parseNum(document.getElementById('otherFee').value);
+            const bookingFee = parseNum(document.getElementById('bookingFee').value);
+            const downDiscount = parseNum(document.getElementById('downDiscount').value);
+
+            const totalDiscount = cashDiscount + downDiscount;
+            document.getElementById('totalAllDiscount').innerText = formatNum(totalDiscount) + " บาท";
+
+            document.getElementById('netPrice').innerText = formatNum(netPrice) + " ฿";
+
+            const firstRow = document.getElementById('firstInstallmentRow');
+            const bgNote = document.getElementById('bgNote');
+
+            if (currentPurchaseType === 'cash') {
+                const netDeliveryCash = netPrice + redPlate + registrationFee + otherFee - bookingFee - downDiscount;
+                document.getElementById('dispDown').innerText = "0 ฿";
+                document.getElementById('netDelivery').innerText = formatNum(netDeliveryCash) + " ฿";
+                firstRow.style.display = 'none';
+                bgNote.style.display = 'none';
+                return;
+            }
+
+            const downAmount = parseNum(document.getElementById('downAmount').value);
+
+            const months = parseInt(document.getElementById('months').value) || 48;
+            const ratePercent = parseFloat(document.getElementById('interestRate').value) || 0;
+            const rate = ratePercent / 100;
+
+            const financeAmount = netPrice - downAmount;
+            const totalInterest = financeAmount * rate * (months / 12);
+            const monthlyPayment = (financeAmount + totalInterest) / months;
+
+            const isBeginning = document.getElementById('chkBeginning').checked;
+            let netDelivery = downAmount + redPlate + registrationFee + otherFee - bookingFee - downDiscount;
+
+            if (isBeginning) {
+                netDelivery += monthlyPayment;
+                document.getElementById('dispFirstInstallment').innerText = formatNum(monthlyPayment) + " ฿";
+                firstRow.style.display = 'flex';
+                bgNote.style.display = 'inline';
+            } else {
+                firstRow.style.display = 'none';
+                bgNote.style.display = 'none';
+            }
+
+            document.getElementById('financeAmount').innerText = formatNum(financeAmount) + " บาท";
+            document.getElementById('totalInterest').innerText = formatNum(totalInterest) + " บาท";
+            document.getElementById('monthlyPayment').innerText = formatNum(monthlyPayment) + " บาท/เดือน";
+            
+            document.getElementById('dispDown').innerText = formatNum(downAmount) + " ฿";
+            document.getElementById('netDelivery').innerText = formatNum(netDelivery) + " ฿";
+        }
+
+        function copyToChat() {
+            const purchaseType = currentPurchaseType === 'cash' ? 'ซื้อเงินสด' : 'จัดไฟแนนซ์';
+            const price = document.getElementById('price').value;
+            const netPrice = document.getElementById('netPrice').innerText;
+            const totalAllDiscount = document.getElementById('totalAllDiscount').innerText;
+            const netDelivery = document.getElementById('netDelivery').innerText;
+            const campaign = document.getElementById('campaignTerm').value;
+
+            let text = `📄 **ใบเสนอราคาและตารางค่างวดรถยนต์**\n`;
+            text += `รูปแบบการซื้อ: ${purchaseType}\n`;
+            text += `ราคารถยนต์: ${price} บาท\n`;
+            text += `สุทธิราคารถยนต์: ${netPrice}\n`;
+            text += `💥 รวมส่วนลดทั้งหมด: ${totalAllDiscount}\n`;
+
+            if (currentPurchaseType === 'finance') {
+                const downPercent = document.getElementById('downPercent').value;
+                const downAmount = document.getElementById('downAmount').value;
+                const months = document.getElementById('months').value;
+                const monthlyPayment = document.getElementById('monthlyPayment').innerText;
+                text += `เงินดาวน์: ${downPercent}% (${downAmount} บาท)\n`;
+                text += `ผ่อนชำระ: ${months} งวด (${monthlyPayment})\n`;
+            }
+
+            text += `💵 รวมจ่ายวันรับรถ: ${netDelivery}\n\n`;
+            text += `📢 **เงื่อนไข:**\n${campaign}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('คัดลอกข้อมูลเรียบร้อยแล้ว!');
+            }).catch(err => {
+                console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
+            });
+        }
+
+        /* ฟังก์ชันบันทึกภาพโดยใช้การคัดลอก DOM (Clone) แก้ตัวอักษรเบลอเด็ดขาด */
+        function saveAsJPG(btnElement) {
+            const srcCard = document.getElementById('quotation-card');
+            const originalBtnText = btnElement.innerHTML;
+            btnElement.innerHTML = "⏳ กำลังสร้างรูปภาพ...";
+            btnElement.disabled = true;
+
+            // 1. คัดลอก Card ออกมา
+            const clone = srcCard.cloneNode(true);
+
+            // 2. ซ่อนองค์ประกอบที่ไม่ต้องการบันทึกลงภาพ
+            const ignoreElements = clone.querySelectorAll('[data-html2canvas-ignore="true"], .btn-del, .btn-add, .no-print');
+            ignoreElements.forEach(el => el.remove());
+
+            // 3. แปลง input/select/textarea เดิมให้เป็น <div> หรือ <span> ข้อความธรรมดา
+            const srcInputs = srcCard.querySelectorAll('input, select, textarea');
+            const cloneInputs = clone.querySelectorAll('input, select, textarea');
+
+            srcInputs.forEach((srcInput, idx) => {
+                const cloneInput = cloneInputs[idx];
+                if (!cloneInput) return;
+
+                let valText = srcInput.value;
+                if (srcInput.tagName === 'SELECT') {
+                    valText = srcInput.options[srcInput.selectedIndex] ? srcInput.options[srcInput.selectedIndex].text : srcInput.value;
+                }
+
+                if (srcInput.type === 'checkbox') {
+                    if (srcInput.checked) {
+                        const checkSpan = document.createElement('span');
+                        checkSpan.innerText = '✓ ';
+                        checkSpan.style.fontWeight = 'bold';
+                        checkSpan.style.color = '#2563eb';
+                        cloneInput.parentNode.insertBefore(checkSpan, cloneInput);
+                    }
+                    cloneInput.remove();
+                    return;
+                }
+
+                const fontSpan = document.createElement('span');
+                fontSpan.innerText = valText;
+                
+                // คัดลอกและตั้งค่าสไตล์อย่างชัดเจน
+                const comp = window.getComputedStyle(srcInput);
+                fontSpan.style.fontFamily = "'Prompt', sans-serif";
+                fontSpan.style.fontSize = comp.fontSize;
+                fontSpan.style.fontWeight = "700";
+                fontSpan.style.color = comp.color !== 'rgba(0, 0, 0, 0)' ? comp.color : '#0f172a';
+                fontSpan.style.display = 'inline-block';
+                fontSpan.style.lineHeight = '1.4';
+                fontSpan.style.whiteSpace = 'pre-wrap';
+                
+                if (srcInput.classList.contains('text-right')) {
+                    fontSpan.style.textAlign = 'right';
+                }
+
+                cloneInput.parentNode.replaceChild(fontSpan, cloneInput);
+            });
+
+            // 4. นำ Clone ไปวางซ่อนไว้นอกหน้าจอเพื่อเรนเดอร์
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'absolute';
+            wrapper.style.left = '-9999px';
+            wrapper.style.top = '0';
+            wrapper.style.width = srcCard.offsetWidth + 'px';
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+
+            // 5. เรียก html2canvas เพื่อเรนเดอร์ภาพจาก Clone
+            setTimeout(() => {
+                html2canvas(clone, {
+                    scale: 2.5, // ความคมชัดระดับสูง
+                    useCORS: true,
+                    backgroundColor: "#ffffff",
+                    logging: false
+                }).then(canvas => {
+                    const imageJPG = canvas.toDataURL("image/jpeg", 0.95);
+                    const link = document.createElement('a');
+                    link.download = `ใบเสนอราคา_${new Date().toISOString().slice(0,10)}.jpg`;
+                    link.href = imageJPG;
+                    link.click();
+
+                    // ลบ wrapper ชั่วคราวและคืนค่าปุ่ม
+                    document.body.removeChild(wrapper);
+                    btnElement.innerHTML = originalBtnText;
+                    btnElement.disabled = false;
+                }).catch(err => {
+                    console.error("Save image failed: ", err);
+                    if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+                    alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
+                    btnElement.innerHTML = originalBtnText;
+                    btnElement.disabled = false;
+                });
+            }, 150);
+        }
+
+        window.onload = function() {
+            initFreebies();
+            calculateFromPercent();
+        };
+    </script>
+</body>
+</html>
